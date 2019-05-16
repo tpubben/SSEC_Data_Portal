@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+# Define a file that stores the password, do not share this with GitHub
 with open('password.txt', 'r') as pw_file:
     hidden_db_password = pw_file.read().strip()
 
