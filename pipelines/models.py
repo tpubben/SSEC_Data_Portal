@@ -9,12 +9,15 @@ class Clients(models.Model):
     client_company = models.CharField(max_length=70)
     client_email = models.CharField(max_length=70)
     client_phone = models.IntegerField
+    client_name = models.CharField(max_length=70, null=True)
 
 
 # add company ID field to the User model to pair with Client table.
 class CustomUser(AbstractUser):
-    client_name = models.CharField
+    client_name = models.CharField(max_length=70, default='NewClient')
 
+    def __str__(self):
+        return self.email
 
 class Pipelines(models.Model):
     pipe_id = models.AutoField(primary_key=True)
