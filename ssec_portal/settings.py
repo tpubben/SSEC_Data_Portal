@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Define a file that stores the password, do not share this with GitHub
-with open('password.txt', 'r') as pw_file:
+with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),'password.txt'), 'r') as pw_file:
     hidden_db_password = pw_file.read().strip()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pipelines.apps.PipelinesConfig',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +81,15 @@ WSGI_APPLICATION = 'ssec_portal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'portal_db',
+        'USER': 'gis_admin',
+        'PASSWORD': hidden_db_password,
+        'HOST': '52.40.243.30',
+        'PORT': '5432',
+    },
+
+    'gis_db': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ssec_gis',
         'USER': 'gis_admin',
         'PASSWORD': hidden_db_password,
@@ -88,6 +98,9 @@ DATABASES = {
     }
 }
 
+# Allow custom extension of user model
+
+AUTH_USER_MODEL = 'pipelines.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
