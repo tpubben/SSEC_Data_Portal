@@ -7,13 +7,22 @@ def open_wmts():
                                'wmts.xml')
     with open('wmts.xml', 'r') as fh:
         tree = ET.parse(fh)
-        root = ET.getroot ('Contents')
         for name in tree.iter('{http://www.opengis.net/ows/1.1}Title'):
+            namevar = ''
+            formatvar = ''
             if name.text.startswith ('GeoServer'):
                 pass
             else:
-                for format in tree.iter('Format'):
-                    class_variable.x.append((name.text, format))
+                namevar = (name.text)
+            for format in tree.iter('{http://www.opengis.net/wmts/1.0}Format'):
+                if format.text.startswith('image/jpeg'):
+                    formatvar = (format.text)
+                if name.text.startswith('Geoserver'):
+                    pass
+                else:
+                    pass
+            class_variable.x.append([namevar, formatvar])
+
 
     print (class_variable.x)
 
