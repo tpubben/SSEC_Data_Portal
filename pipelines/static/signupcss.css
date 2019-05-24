@@ -1,0 +1,20 @@
+.helptext {
+    font-style: italic;
+    font-family: sans-serif;
+    font-size: 0.6em;
+    list-style: square;
+}
+
+label {
+    display: inline-block;
+    width: 15%;
+    padding: 5px 0px 5px 0px;
+}
+
+li {
+    list-style: none;
+}
+
+ul {
+    padding-left: 15px;
+}

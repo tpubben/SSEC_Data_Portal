@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 
-class Clients(models.Model):
+class Client(models.Model):
     client_id = models.AutoField(primary_key=True)
     client_company = models.CharField(max_length=70)
     client_email = models.CharField(max_length=70)
@@ -19,14 +19,14 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
-class Pipelines(models.Model):
+class Pipeline(models.Model):
     pipe_id = models.AutoField(primary_key=True)
-    client_id_fk = models.ForeignKey(Clients, on_delete=models.CASCADE)
+    client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE)
     pipe_name = models.CharField(max_length=20)
 
 
-class Reports(models.Model):
+class Report(models.Model):
     report_id = models.AutoField(primary_key=True)
-    pipe_id_fk = models.ForeignKey(Pipelines, on_delete=models.CASCADE)
+    pipe_id_fk = models.ForeignKey(Pipeline, on_delete=models.CASCADE)
     report_object = models.BinaryField
     report_date = models.DateField

@@ -1,13 +1,40 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <title>{% block title %}SSEC Ltd. Data Portal{% endblock %}</title>
+
+  <link rel="stylesheet", href='{% static "style.css" %}'>
 </head>
+
+  <header>
+    <div id="header">
+      <div class="user">
+        {% if user.is_authenticated %}
+          {% if request.user.is_superuser %}
+            Hello: <b>{{ user.username }} - Super User Privileges</b> | <a href="{% url 'logout' %}">logout</a>
+          {% else %}
+            Hello: <b>{{ user.username }}</b> | <a href="{% url 'logout' %}">logout</a>
+          {% endif %}
+        {% else %}
+        Please login or sign up:
+        <a href="{% url 'login' %}">login</a> |
+        <a href="{% url 'signup' %}">signup</a>
+        {% endif %}
+      </div>
+
+    </div>
+  </header>
+
 <body>
+
   <main>
+    <div class="main-content">
     {% block content %}
     {% endblock %}
+    </div>
   </main>
 </body>
 </html>
