@@ -17,9 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 from django.views.generic.base import TemplateView
+from .views import index_redirect
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('', index_redirect),
     path('pipelines/', include('pipelines.urls')),
     path('admin/', admin.site.urls),
     path('pipelines/', include('django.contrib.auth.urls')),

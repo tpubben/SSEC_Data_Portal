@@ -8,13 +8,16 @@ class Client(models.Model):
     client_id = models.AutoField(primary_key=True)
     client_company = models.CharField(max_length=70)
     client_email = models.CharField(max_length=70)
-    client_phone = models.IntegerField
-    client_name = models.CharField(max_length=70, null=True)
+    client_phone = models.CharField(max_length=10, null=True)
+    #client_name = models.CharField(max_length=70, null=True)
+
+    def __str__(self):
+        return "{} | Client ID {:03d}".format(self.client_company, self.client_id)
 
 
 # add company ID field to the User model to pair with Client table.
 class CustomUser(AbstractUser):
-    client_name = models.CharField(max_length=70, default='NewClient')
+    client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.email
@@ -24,9 +27,15 @@ class Pipeline(models.Model):
     client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE)
     pipe_name = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.pipe_name
+
 
 class Report(models.Model):
     report_id = models.AutoField(primary_key=True)
     pipe_id_fk = models.ForeignKey(Pipeline, on_delete=models.CASCADE)
-    report_object = models.BinaryField
-    report_date = models.DateField
+    report_object = models.BinaryField(null=True)
+    report_date = models.DateField(null=True)
+
+    def __str__(self):
+        return self.report_id

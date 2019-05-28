@@ -1,7 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<h1>Welcome to the Silver Spring Energy Consulting Ltd. data portal.</h1>
-	<h2>Log in:</h2>
+<div class="body">
+	<div class="mainheader">
+		<h1>Welcome to the Silver Spring Energy Consulting Ltd. data portal.</h1>
+	</div>
+	<div class="clientinfo">
+		{% if user.is_authenticated %}
+		{{ user.client_id_fk }}
+			<ul>
+				{% for pipeline in pipe_list %}
+					<li>{{ pipeline.pipe_name }}</li>
+				{% empty %}
+					<li>Nothing to see here</li>
+				{% endfor %}
+			</ul>
+		{% else %}
+		    Login to see your data.
+		{% endif %}
+	</div>
+</div>
+
+
 {% endblock %}
 
