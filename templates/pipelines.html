@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block headcontent %}
+    <script type="text/javascript">
+        function show_pipeline_info(pipe_name) {
+            alert(pipe_name);
+        }
+    </script>
+{% endblock %}
+{% block content %}
+{% load static %}
+<div class="clientinfo">
+    <p>Select a pipeline below to see results.</p>
+		{% if user.is_authenticated %}
+				{% for pipeline in pipe_list %}
+                <ul class="pipeline_list">
+                    <li><span class="pipeline_name">{{ pipeline.pipe_name }}</span></li>
+                </ul>
+				{% empty %}
+                    No pipelines in your account.
+				{% endfor %}
+		{% else %}
+		    Login to see your data.
+		{% endif %}
+</div>
+{% endblock %}
+
+
+
+
+
+
+<!--<a onclick="show_pipeline_info('{{ pipeline.pipe_name }}')" href="javascript:void(0);">-->

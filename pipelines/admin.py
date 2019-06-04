@@ -5,7 +5,8 @@ from django.contrib.auth.admin import UserChangeForm
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomClientCreationForm, CustomClientChangeForm
-from .models import CustomUser, Client, Pipeline, Report
+from .models import CustomUser, Client, Pipeline, Report, SurveyDate
+
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
@@ -58,3 +59,4 @@ admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Client, CustomClientAdmin)
 admin.site.register(Pipeline, CustomPipelineAdmin)
 admin.site.register(Report, CustomReportAdmin)
+admin.site.register(SurveyDate)

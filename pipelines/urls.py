@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('signup/', views.SignUp.as_view(), name='signup'),
+    path('viewpipeline/', views.PipelineView, name='pipeline_view'),
+    path('surveydates/', views.SurveyDateView.as_view(), name='survey_view'),
 ]
 

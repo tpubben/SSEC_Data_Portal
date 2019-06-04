@@ -22,6 +22,7 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+
 class Pipeline(models.Model):
     pipe_id = models.AutoField(primary_key=True)
     client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE)
@@ -29,6 +30,15 @@ class Pipeline(models.Model):
 
     def __str__(self):
         return self.pipe_name
+
+
+class SurveyDate(models.Model):
+    client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE)
+    pipe_id_fk = models.ForeignKey(Pipeline, on_delete=models.CASCADE)
+    survey_date = models.DateField()
+
+    def __str__(self):
+        return str(self.survey_date, self.pipe_id_fk)
 
 
 class Report(models.Model):

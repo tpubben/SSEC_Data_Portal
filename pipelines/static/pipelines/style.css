@@ -16,13 +16,8 @@
 
 .header-container div {
     width: 50%;
-    height: 80px;
+    height: 40px;
     padding: 5px;
-}
-
-.header-container div img {
-    width: 100%;
-    max-width: 500px;
 }
 
 .header-container .portaltitle {
@@ -32,11 +27,7 @@
     text-align: left;
     top: 0;
     left: 0;
-}
-
-.header-container .portaltitle img.resize {
-    height: 50px;
-    width: 100px;
+    font-size: 110%;
 }
 
 .header-container .user {
@@ -58,27 +49,43 @@
 }
 
 /* The side navigation menu */
+#sidebar {
+  margin: 0;
+  padding-left: 0px;
+  width: 200px;
+  background-color: white;
+  position: absolute;
+  height: 100%;
+  overflow: auto;
+}
+
+#sidebar span {
+    padding-left: 10px;
+}
+
 
 /* Sidebar links */
-.sidebar-nav {
+#sidebar ul {
     list-style: none;
-    margin-left: 0px;
 }
 
-.sidebar-nav a {
-    color: black;
-    display: block;
-    text-decoration: none;
-    width: 200px;
+#sidebar a {
+  display: block;
+  color: black;
+  padding: 10px;
+  text-decoration: none;
 }
 
-.sidebar-nav a:hover {
-    color: white;
-    background-color: #4CAF50;
-}
-
-.active {
+/* Active/current link */
+#sidebar a.active {
   background-color: #4CAF50;
+  color: white;
+}
+
+/* Links on mouse-over */
+#sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
 }
 
 #nologin {
@@ -89,10 +96,10 @@
 #workspace {
     position: absolute;
     display: block;
-    width: 75vw;
+    width: 85vw;
     height: 95vh;
-    left: 0px;
-    top: 0px;
+    left: 200px;
+    top: 50px;
 }
 
 #workspace .map {
@@ -101,12 +108,3 @@
     height: 100%;
     border: 0;
 }
-
-.pipeline_name {
-    font-weight: bold;
-}
-
-.pipeline_list {
-    list-style: none;
-}
-

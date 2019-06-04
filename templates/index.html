@@ -2,23 +2,11 @@
 
 {% block content %}
 <div class="body">
-	<div class="mainheader">
-		<h1>Welcome to the Silver Spring Energy Consulting Ltd. data portal.</h1>
-	</div>
-	<div class="clientinfo">
-		{% if user.is_authenticated %}
-		{{ user.client_id_fk }}
-			<ul>
-				{% for pipeline in pipe_list %}
-					<li>{{ pipeline.pipe_name }}</li>
-				{% empty %}
-					<li>Nothing to see here</li>
-				{% endfor %}
-			</ul>
-		{% else %}
-		    Login to see your data.
-		{% endif %}
-	</div>
+    <div id="workspace">
+        <iframe class="map" src="https://api.mapbox.com/styles/v1/kpubben/cjuvs5vcgcasd1fo1lf4l40r2.html?fresh=true&title=true&access_token=pk.eyJ1Ijoia3B1YmJlbiIsImEiOiJjanV1NnZudngwZnR6M3lwaGxzemd6MjE3In0.9bfM9SkEGnTZJN11T3FoOw#11.8/52.22035/-114.14942"></iframe>
+        </iframe>
+    </div>
+
 </div>
 
 
