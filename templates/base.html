@@ -3,6 +3,7 @@
 <head>
   {% load static %}
   <title>SSEC Data Portal</title>
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}"/>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -17,9 +18,9 @@
         <div class="user">
             {% if user.is_authenticated %}
             {% if request.user.is_superuser %}
-            Hello: <b>{{ user.username }} - Super User Privileges</b> | <a href="{% url 'logout' %}">logout</a>
+            <span style="font-size:80%">Hello: </span><span id="username">{{ user.username }} - Super User Privileges</span> | <a href="{% url 'logout' %}">logout</a>
             {% else %}
-            Hello: <b>{{ user.username }}</b> | <a href="{% url 'logout' %}">logout</a>
+            <span style="font-size:80%">Hello: </span><span id="username">{{ user.username }}</span> | <a href="{% url 'logout' %}">logout</a>
             {% endif %}
             {% else %}
             Please login or sign up:
@@ -27,10 +28,10 @@
             <a href="{% url 'signup' %}">signup</a>
             {% endif %}
             {% if user.is_authenticated %}
-            <p>{{ user.client_id_fk }}
+            <p><span id="client-user-info">{{ user.client_id_fk }}</span>
                 {% else %}
-                <span id="nologin">Login to see your data.</span>
-                {% endif %}
+            <p><span id="nologin">Login to see your data.</span></p>
+                {% endif %}</p>
         </div>
 
     </div>
@@ -40,13 +41,10 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-2">
-      {% block sidebar %}
         <ul class="sidebar-nav">
             <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'pipeline_view' %}">Pipelines</a></li>
-            <li><a href="">Reports</a></li>
+            <li><a href="{% url 'report_view' %}">Reports</a></li>
         </ul>
-     {% endblock %}
       </div>
       <div class="col-sm-10 ">{% block content %}{% endblock %}</div>
     </div>

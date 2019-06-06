@@ -1,11 +1,9 @@
 from django.contrib import admin
 from django import forms
-from django.contrib.auth import get_user_model
-from django.contrib.auth.admin import UserChangeForm
 from django.contrib.auth.admin import UserAdmin
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomClientCreationForm, CustomClientChangeForm
-from .models import CustomUser, Client, Pipeline, Report, SurveyDate
+from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .models import CustomUser, Client, Pipeline, SurveyDate
 
 
 class CustomUserAdmin(UserAdmin):
@@ -43,20 +41,7 @@ class CustomPipelineAdmin(admin.ModelAdmin):
     fields = ['pipe_name', 'client_id_fk']
 
 
-class CustomReportForm(forms.ModelForm):
-
-    class Meta:
-        model = Report
-        fields = ['pipe_id_fk', 'report_date']
-
-
-class CustomReportAdmin(admin.ModelAdmin):
-    form = CustomReportForm
-    fields = ['pipe_id_fk', 'report_date']
-
-
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Client, CustomClientAdmin)
 admin.site.register(Pipeline, CustomPipelineAdmin)
-admin.site.register(Report, CustomReportAdmin)
 admin.site.register(SurveyDate)

@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
-
-
-
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'signupcss.css' %}">
 <h2>Sign up</h2>
+
+<p>If you would like an account with us please sign up using the form below. One of our staff will contact you to link
+your account with the appropriate corporate account.</p>
+
+
 <form method="post">
   {% csrf_token %}
   {{ form.as_ul }}

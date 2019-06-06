@@ -1,0 +1,47 @@
+<html>
+<head>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin=""/>
+    <!-- Leaflet JS. Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+            integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+            crossorigin=""></script>
+
+    <title>Methane Survey - {{ pipe_slug }}</title>
+    <style>
+        body {height: 94%; background-color: #494949}
+        #map {height: 100%;}
+
+    </style>
+</head>
+
+<body>
+<div id="MapTitle">SSEC Methane Mapping Service - {{ pipe_comp }}</div>
+<style>
+          #MapTitle {
+              margin-bottom: 5px;
+              background-color: #494949;
+              color: white;
+              font-family: Arial;
+              font-size: 30px;
+              font-weight: bold;
+              text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+
+</style>
+<div id="map"></div>
+<style>
+          #map {
+              border-style: double;
+              border-width: 7;
+              border-radius: 10px;
+          }
+
+</style>
+{% load static %}
+<script src="{% static 'gasmap.js' %}" type="text/javascript" workspace={{ company_slug }} pipeline={{ pipe_comp }}
+        date={{ date_slug }}></script>
+<div></div>
+</body>
+</html>

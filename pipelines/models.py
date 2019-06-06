@@ -9,7 +9,6 @@ class Client(models.Model):
     client_company = models.CharField(max_length=70)
     client_email = models.CharField(max_length=70)
     client_phone = models.CharField(max_length=10, null=True)
-    #client_name = models.CharField(max_length=70, null=True)
 
     def __str__(self):
         return "{} | Client ID {:03d}".format(self.client_company, self.client_id)
@@ -38,14 +37,12 @@ class SurveyDate(models.Model):
     survey_date = models.DateField()
 
     def __str__(self):
-        return str(self.survey_date, self.pipe_id_fk)
 
+        # create a slug based off the returned foreign key from the client model
+        if str(self.client_id_fk).split()[1] != '|':
+            client_slug = str(self.client_id_fk).split()[0]+str(self.client_id_fk).split()[1]
+        else:
+            client_slug = str(self.client_id_fk).split()[0]
 
-class Report(models.Model):
-    report_id = models.AutoField(primary_key=True)
-    pipe_id_fk = models.ForeignKey(Pipeline, on_delete=models.CASCADE)
-    report_object = models.BinaryField(null=True)
-    report_date = models.DateField(null=True)
-
-    def __str__(self):
-        return self.report_id
+        # return that slug along with the pipeline ID and date of survey for display and parsing into JS script
+        return "{}_{}_{}".format(client_slug, self.pipe_id_fk, self.survey_date)
