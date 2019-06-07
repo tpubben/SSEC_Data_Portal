@@ -28,7 +28,9 @@
         <tr>
             <td>{{ report.pipe_id_fk }}</td>
             <td>{{ report.survey_date }}</td>
+            <!--Pull the url for the pdf report-->
             <td><a href="{% get_static_prefix %}reports/{{ report }}.pdf" target="_blank">{{ report }}</a></td>
+            <!--Use URL parameters to push variables into javascript-->
             <td><a href="{% url 'map_view' %}?q={{ report }}" target="_blank"><img
                     src="{% static 'img/map_icon.png' %}"/></a></td>
         </tr>

@@ -18,7 +18,7 @@
 </head>
 
 <body>
-<div id="MapTitle">SSEC Methane Mapping Service - {{ pipe_comp }}</div>
+<div id="MapTitle">SSEC Methane Mapping Service - {{ pipe_slug }}</div>
 <style>
           #MapTitle {
               margin-bottom: 5px;
@@ -40,6 +40,7 @@
 
 </style>
 {% load static %}
+<!--run the leaflet script by pushing variables through data parameters-->
 <script src="{% static 'gasmap.js' %}" type="text/javascript" workspace={{ company_slug }} pipeline={{ pipe_comp }}
         date={{ date_slug }}></script>
 <div></div>

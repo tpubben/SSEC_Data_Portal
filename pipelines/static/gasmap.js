@@ -1,6 +1,8 @@
         // Define variables to call from Django
         var workspace = document.currentScript.getAttribute('workspace') // this is the company_slug
+        // Form comes in as the first two (or one) word in CamelCase. Eg. BurntLake
         var pipename = document.currentScript.getAttribute('pipeline') // pipe_slug
+        // Comes in exactly as the pipe name would be displayed to user
         var surveydate = document.currentScript.getAttribute('date') // date_slug
         var fullslug = workspace+'_'+pipename+'_'+surveydate
 

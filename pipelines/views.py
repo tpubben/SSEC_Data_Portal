@@ -7,6 +7,8 @@ from django.template import loader
 
 from .forms import CustomUserCreationForm, SurveyDateForm
 from .models import Pipeline, SurveyDate
+
+
 # Create your views here.
 
 
@@ -15,11 +17,13 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
+
 '''
 class SurveyView(generic.FormView):
     form_class = SurveyDateForm
     template_name = 'report_view.html'
 '''
+
 
 def index(request):
     return render(request, 'index.html')
@@ -35,32 +39,36 @@ def PipelineView(request):
 
     return render(request, 'pipelines.html', context)
 
+
 def ReportView(request):
-   #form = SurveyDateForm(request)
+    # form = SurveyDateForm(request)
     try:
         client_id = request.user.client_id_fk
     except:
         client_id = 0
     report_list = SurveyDate.objects.filter(client_id_fk=client_id)
     context = {'report_list': report_list}
-    #form.fields['pipe_id_fk'].queryset = SurveyDate.objects.filter(client_id_fk=client_id)
+    # form.fields['pipe_id_fk'].queryset = SurveyDate.objects.filter(client_id_fk=client_id)
 
     return render(request, 'report_view.html', context)
 
 
 def MapView(request):
+    # This is where we pull information from the URL using a parameter get request.
     map_id = request.GET.get('q', '')
 
     if map_id != '':
-        company_slug = map_id.split('_')[0]
-        pipe_slug = map_id.split('_')[1]
-        pipe_comp = pipe_slug.split()[0]+pipe_slug.split()[1]
-        date_slug = map_id.split('_')[2]
+        company_slug = map_id.split('_')[0] # Company Name
+        pipe_slug = map_id.split('_')[1]  # pipe name preserving spaces
+        pipe_comp = pipe_slug.split()[0] + pipe_slug.split()[
+            1]  # pipe name eliminating spaces to allow for pass through to JS
+        date_slug = map_id.split('_')[2] # date format in yyyy-mm-dd
     else:
         company_slug, pipe_slug, date_slug = '', '', ''
 
     print("the mapid is: ", map_id)
 
-    context = {'company_slug': company_slug, 'pipe_slug': pipe_slug, 'date_slug': date_slug, 'survey_name': map_id, 'pipe_comp':pipe_comp}
+    context = {'company_slug': company_slug, 'pipe_slug': pipe_slug, 'date_slug': date_slug, 'survey_name': map_id,
+               'pipe_comp': pipe_comp}
 
     return render(request, 'gas_survey.html', context)

@@ -29,7 +29,7 @@ SECRET_KEY = 'x#+n0$4k5f#x)mw5*!z%ct^1sk*x$1fsqr_4kijr5=y!b_tl4l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ssecmapserver.ddns.net', '127.0.0.1']
 
 
 # Application definition
