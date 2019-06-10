@@ -29,7 +29,7 @@ SECRET_KEY = 'x#+n0$4k5f#x)mw5*!z%ct^1sk*x$1fsqr_4kijr5=y!b_tl4l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ssecmapserver.ddns.net', '127.0.0.1']
+ALLOWED_HOSTS = ['ssecmapserver.ddns.net', '127.0.0.1', '192.168.1.52']
 
 
 # Application definition
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pipelines.apps.PipelinesConfig',
+    'django.contrib.gis',
+    'guardian',
 ]
 
 MIDDLEWARE = [
@@ -98,6 +100,14 @@ DATABASES = {
     }
 }
 
+# Add guardian for record level authentication
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)
+
+
 # Allow custom extension of user model
 
 AUTH_USER_MODEL = 'pipelines.CustomUser'
@@ -146,3 +156,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
+
+
+# GDAL Library
+#GDAL_LIBRARY_PATH = r'C:\OSGeo4W64\share\gdal'
+
+if os.name == 'nt':
+    import platform
+    OSGEO4W = r"C:\OSGeo4W"
+    if '64' in platform.architecture()[0]:
+        OSGEO4W += "64"
+    assert os.path.isdir(OSGEO4W), "Directory does not exist: " + OSGEO4W
+    os.environ['OSGEO4W_ROOT'] = OSGEO4W
+    os.environ['GDAL_DATA'] = OSGEO4W + r"\share\gdal"
+    os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
+    os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
