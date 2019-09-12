@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from . import views
 from django.views.generic.base import RedirectView, TemplateView
-
+from djgeojson.views import GeoJSONLayerView
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -25,5 +25,7 @@ urlpatterns = [
     path('viewpipeline/', views.PipelineView, name='pipeline_view'),
     path('reports/', views.ReportView, name='report_view'),
     path('mapview/', views.MapView, name='map_view'),
+    path('api/pipeline/', views.GetPipelineData.as_view()),
+    path('map/', TemplateView.as_view(template_name='map.html')),
 ]
 

@@ -4,9 +4,11 @@ from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.views import generic
 from django.template import loader
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from .forms import CustomUserCreationForm, SurveyDateForm
-from .models import Pipeline, SurveyDate
+from .models import *
 
 
 # Create your views here.
@@ -58,11 +60,11 @@ def MapView(request):
     map_id = request.GET.get('q', '')
 
     if map_id != '':
-        company_slug = map_id.split('_')[0] # Company Name
+        company_slug = map_id.split('_')[0]  # Company Name
         pipe_slug = map_id.split('_')[1]  # pipe name preserving spaces
         pipe_comp = pipe_slug.split()[0] + pipe_slug.split()[
             1]  # pipe name eliminating spaces to allow for pass through to JS
-        date_slug = map_id.split('_')[2] # date format in yyyy-mm-dd
+        date_slug = map_id.split('_')[2]  # date format in yyyy-mm-dd
     else:
         company_slug, pipe_slug, date_slug = '', '', ''
 
@@ -72,3 +74,22 @@ def MapView(request):
                'pipe_comp': pipe_comp}
 
     return render(request, 'gas_survey.html', context)
+
+
+class GetPipelineData(APIView):
+
+    def get(self, request, format=None):
+        pipeline_objects = Pipeline.objects.all()
+        pipe_data = {}
+        for object in pipeline_objects:
+            header = {"type": "FeatureCollection", "name": object.pipe_name,
+                      "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::4326"}},
+                      "features": [{"type": "Feature", "properties": {"name": object.pipe_name},
+                                    "geometry": {"type": "MultiLineString", "coordinates": [[point for point in object.pipe_geom]]}}]}
+
+            pipe_data[object.pipe_name] = object.pipe_geom
+
+        return Response(header)
+
+def MapView(request):
+    return render(request, 'map.html')

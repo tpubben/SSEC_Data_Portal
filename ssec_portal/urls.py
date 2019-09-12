@@ -18,6 +18,7 @@ from django.urls import path, include
 from . import views
 from django.views.generic.base import TemplateView
 from .views import index_redirect
+from djgeojson.views import GeoJSONLayerView
 
 urlpatterns = [
     path('', index_redirect),

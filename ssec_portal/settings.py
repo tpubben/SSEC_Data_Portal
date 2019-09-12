@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'pipelines.apps.PipelinesConfig',
     'django.contrib.gis',
     'guardian',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -82,22 +83,14 @@ WSGI_APPLICATION = 'ssec_portal.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'portal_db',
-        'USER': 'gis_admin',
-        'PASSWORD': hidden_db_password,
-        'HOST': '52.40.243.30',
-        'PORT': '5432',
-    },
-
-    'gis_db': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ssec_gis',
+        'ENGINE':'django.contrib.gis.db.backends.postgis',
+        'NAME': 'gas_portal_db',
         'USER': 'gis_admin',
         'PASSWORD': hidden_db_password,
         'HOST': '52.40.243.30',
         'PORT': '5432',
     }
+
 }
 
 # Add guardian for record level authentication

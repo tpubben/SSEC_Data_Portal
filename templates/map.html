@@ -1,0 +1,144 @@
+<html>
+  <head>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""/>
+    <!-- Leaflet JS. Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+       integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+       crossorigin=""></script>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <style>
+        body {
+          height: 94%;
+          background-color: none
+        }
+        #map {
+          height: 100%;
+          border-style: double;
+          border-width: 7;
+          border-radius: 10px;
+        }
+
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+
+    <script>
+        $(document).ready(function(){
+        var endpoint = 'http://127.0.0.1:8000/pipelines/api/pipeline/'
+
+                $.ajax({
+                    method: "GET",
+                    url: endpoint,
+                    data:
+                    success: function(data){
+
+            var gas = [{
+        "type": "FeatureCollection",
+        "name": "GasSample",
+        "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+        "features": [
+        { "type": "Feature", "properties": { "id_1": 1, "id_0": 10, "id": 23, "GasReading": 1062.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.43178, 51.9957367 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 2, "id_0": 16, "id": 32, "GasReading": 1755.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4308833, 51.9915033 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 3, "id_0": 29, "id": 66, "GasReading": 650.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4303533, 51.9844967 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 4, "id_0": 58, "id": 95, "GasReading": 509.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4308783, 51.9840083 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 5, "id_0": 68, "id": 105, "GasReading": 961.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4314167, 51.982975 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 6, "id_0": 94, "id": 156, "GasReading": 548.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4335383, 51.9817967 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 7, "id_0": 95, "id": 157, "GasReading": 970.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4335617, 51.9817767 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 8, "id_0": 107, "id": 169, "GasReading": 846.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4353667, 51.9804067 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 9, "id_0": 248, "id": 693, "GasReading": 602.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4806967, 51.9550417 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 10, "id_0": 255, "id": 700, "GasReading": 580.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4806967, 51.9550417 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 11, "id_0": 267, "id": 712, "GasReading": 509.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4745817, 51.9553283 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 12, "id_0": 268, "id": 713, "GasReading": 687.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.474885, 51.9553217 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 13, "id_0": 274, "id": 719, "GasReading": 833.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.476395, 51.9553033 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 14, "id_0": 279, "id": 724, "GasReading": 520.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.47767, 51.95528 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 15, "id_0": 306, "id": 752, "GasReading": 2242.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4806533, 51.9550817 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 16, "id_0": 319, "id": 464, "GasReading": 521.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4579733, 51.9613417 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 17, "id_0": 362, "id": 538, "GasReading": 681.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.463535, 51.95794 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 18, "id_0": 387, "id": 603, "GasReading": 711.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4648417, 51.9567867 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 19, "id_0": 400, "id": 616, "GasReading": 641.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.46364, 51.9580017 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 20, "id_0": 425, "id": 641, "GasReading": 540.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.466305, 51.9559467 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 21, "id_0": 431, "id": 384, "GasReading": 1328.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.4508567, 51.9683067 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 22, "id_0": 437, "id": 390, "GasReading": 1460.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.45091, 51.9690717 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 23, "id_0": 450, "id": 403, "GasReading": 501.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.45107, 51.9682067 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 24, "id_0": 492, "id": 757, "GasReading": 926.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.507105, 51.9480517 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 25, "id_0": 519, "id": 784, "GasReading": 857.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.5165767, 51.947885 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 26, "id_0": 520, "id": 785, "GasReading": 618.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.5166917, 51.94789 ] ] } },
+        { "type": "Feature", "properties": { "id_1": 27, "id_0": 530, "id": 795, "GasReading": 578.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -114.5202117, 51.94793 ] ] } }
+        ]
+        }];
+
+            var pipe = data;
+
+            var site = [];
+
+            function displaymap (gas, pipe, site) {
+
+                var map = L.map('map').setView([53, -115], 6);
+
+                // Add mapbox basemaps as a group so they can be properly added to the layer control
+                var mapbox = ({
+
+                    'Streets': L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3B1YmJlbiIsImEiOiJjanV1NnZudngwZnR6M3lwaGxzemd6MjE3In0.9bfM9SkEGnTZJN11T3FoOw'
+                                        ).addTo(map)
+                    });
+
+
+                // Add each data variable to a geojson layer
+                var gaslayer = L.geoJson(gas, {
+                    onEachFeature: function(feature, gaslayer) {
+                        if (feature.properties && feature.properties.GasReading && feature.geometry.coordinates) {
+                            gaslayer.bindPopup('<h3>Gas (PPMM): '+feature.properties.GasReading+'</h3>' + 'Location (Long, Lat): ' + feature.geometry.coordinates, {closeButton: true})
+                            gaslayer.on('mouseover', function() {
+                                gaslayer.openPopup();
+                            })
+                        }
+                    },
+
+                }).addTo(map);
+
+                var pipestyle = {
+                    "color": "#228B22",
+                    "weight": "5",
+                    "opacity": "1"
+                }
+
+                // Use a try/except to add optional layers
+                var pipelayer = L.geoJson(pipe, {style: pipestyle}).addTo(map)
+
+                var sitelayer = L.geoJson(site).addTo(map);
+
+
+                // Group layers under 'survey'
+                var survey = {
+                    "Gas Survey": gaslayer,
+                    "Pipeline": pipelayer,
+                    "Site Imagery": sitelayer
+                };
+
+                // Add Layer control, scale, and center map on gas survey
+                map.fitBounds(gaslayer.getBounds());
+                L.control.layers(null, survey,{collapsed:false}).addTo(map);
+                L.control.scale().addTo(map);
+            }
+            displaymap (gas, pipe, site)
+                    },
+                    error: function(error_data){
+                    console.log("error")
+                    console.log(error_data)
+                    }
+                })
+        })
+    </script>
+  </body>
+</html>
+
+<!-- Bootstrap 4 -->
+

@@ -33,12 +33,12 @@ class CustomPipelineForm(forms.ModelForm):
 
     class Meta:
         model = Pipeline
-        fields = ['pipe_name', 'client_id_fk']
+        fields = ['pipe_name', 'client_id_fk', 'pipe_geom']
 
 
 class CustomPipelineAdmin(admin.ModelAdmin):
     form = CustomPipelineForm
-    fields = ['pipe_name', 'client_id_fk']
+    fields = ['pipe_name', 'client_id_fk', 'pipe_geom']
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
