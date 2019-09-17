@@ -74,7 +74,6 @@
                             ).addTo(map)
         });
 
-
     // Add each data variable to a geojson layer
     var gaslayer = L.geoJson(gas, {
         onEachFeature: function(feature, gaslayer) {
@@ -85,6 +84,8 @@
                 })
             }
         },
+
+        pointToLayer:
     }).addTo(map);
 
     var pipestyle = {
@@ -94,7 +95,7 @@
     }
 
     // Use a try/except to add optional layers
-    var pipelayer = L.geoJson(pipe, {style: pipestyle}).addTo(map)
+    var pipelayer = L.geoJson(pipe, {style: pipestyle}).addTo(map);
 
     var sitelayer = L.geoJson(site).addTo(map);
 
@@ -103,7 +104,7 @@
     var survey = {
         "Gas Survey": gaslayer,
         "Pipeline": pipelayer,
-        "Site Imagery": sitelayer
+        "Site": sitelayer
     };
 
     // Add Layer control, scale, and center map on gas survey

@@ -48,6 +48,7 @@ def MapView(request, survey_id):
 
     for point in points:
         GasReading = point.gas_value
+        print(GasReading)
         xcoord = point.gas_geom.coords[0]
         ycoord = point.gas_geom.coords[1]
         geoms.append((GasReading, xcoord, ycoord))
@@ -57,14 +58,13 @@ def MapView(request, survey_id):
         name = pipeline.pipe_name
         allcoords = [[coord[0], coord[1]] for coord in pipeline.pipe_geom.coords]
         context = {'points': geoms, 'name': name, 'linecoords': allcoords, 'infcoords': []}
-
-
-
-
-
-
-
-
+    elif survey.geometry_type == "SITE":
+        site = Infrastructure.objects.get(pk=survey.inf_id_fk_id)
+        sitename = Infrastructure.inf_name
+        infcoords = [[coord[0], coord[1]] for coord in site.inf_geom.coords]
+        context = {'points': geoms, 'name': sitename, 'linecoords': [], 'infcoords': infcoords}
+    else:
+        pass
 
     return render(request, 'gas_survey.html', context)
 
