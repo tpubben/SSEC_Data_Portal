@@ -36,7 +36,7 @@ class CustomClientChangeForm():
 class SurveyDateForm(forms.ModelForm):
     class Meta:
         model = SurveyDate
-        fields = ['client_id_fk', 'pipe_id_fk', 'survey_date']
+        fields = '__all__'
 
     def __init__(self, request, *args, **kwargs):
         super(SurveyDateForm,self).__init__(*args, **kwargs)

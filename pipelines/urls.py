@@ -22,10 +22,9 @@ from djgeojson.views import GeoJSONLayerView
 urlpatterns = [
     path('', views.index, name='index'),
     path('signup/', views.SignUp.as_view(), name='signup'),
-    path('viewpipeline/', views.PipelineView, name='pipeline_view'),
     path('reports/', views.ReportView, name='report_view'),
-    path('mapview/', views.MapView, name='map_view'),
-    path('api/pipeline/', views.GetPipelineData.as_view()),
+    path('mapview/<int:survey_id>/', views.MapView, name='map_view'),
     path('map/', TemplateView.as_view(template_name='map.html')),
+
 ]
 

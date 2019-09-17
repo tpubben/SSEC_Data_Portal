@@ -13,13 +13,13 @@
 {% endblock %}
 {% block content %}
 <div class="clientinfo">
-    <h1>Pipeline reports</h1>
+    <h1>Site reports</h1>
     {% if user.is_authenticated %}
     <p>Click on a column heading to sort by that column.</p>
     <table class="sortable" id="sortable-theme-finder" data-sortable>
         <caption>Reports are listed by pipeline and date the survey was completed.</caption>
         <tr>
-            <th>Pipeline Name</th>
+            <th>Site Name</th>
             <th>Survey Date</th>
             <th>PDF</th>
             <th>Web Map</th>
@@ -31,7 +31,7 @@
             <!--Pull the url for the pdf report-->
             <td><a href="{% get_static_prefix %}reports/{{ report }}.pdf" target="_blank">{{ report }}</a></td>
             <!--Use URL parameters to push variables into javascript-->
-            <td><a href="{% url 'map_view' %}?q={{ report }}" target="_blank"><img
+            <td><a href="{% url 'map_view' report.id %}" target="_blank"><img
                     src="{% static 'img/map_icon.png' %}"/></a></td>
         </tr>
         {% empty %}

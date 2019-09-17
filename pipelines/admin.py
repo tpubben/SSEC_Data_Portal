@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.contrib.auth.admin import UserAdmin
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import *
 from .models import CustomUser, Client, Pipeline, SurveyDate
 
 
@@ -39,6 +39,12 @@ class CustomPipelineForm(forms.ModelForm):
 class CustomPipelineAdmin(admin.ModelAdmin):
     form = CustomPipelineForm
     fields = ['pipe_name', 'client_id_fk', 'pipe_geom']
+
+
+class CustomSurveyAdmin(admin.ModelAdmin):
+    form = SurveyDateForm
+    fields = '__all__'
+
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

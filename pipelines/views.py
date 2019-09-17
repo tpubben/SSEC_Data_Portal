@@ -6,6 +6,7 @@ from django.views import generic
 from django.template import loader
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.gis.geos import GEOSGeometry
 
 from .forms import CustomUserCreationForm, SurveyDateForm
 from .models import *
@@ -20,26 +21,8 @@ class SignUp(generic.CreateView):
     template_name = 'signup.html'
 
 
-'''
-class SurveyView(generic.FormView):
-    form_class = SurveyDateForm
-    template_name = 'report_view.html'
-'''
-
-
 def index(request):
     return render(request, 'index.html')
-
-
-def PipelineView(request):
-    try:
-        client_id = request.user.client_id_fk
-    except:
-        client_id = 0
-    pipe_list = Pipeline.objects.filter(client_id_fk=client_id)
-    context = {'pipe_list': pipe_list}
-
-    return render(request, 'pipelines.html', context)
 
 
 def ReportView(request):
@@ -55,41 +38,35 @@ def ReportView(request):
     return render(request, 'report_view.html', context)
 
 
-def MapView(request):
+def MapView(request, survey_id):
+
     # This is where we pull information from the URL using a parameter get request.
-    map_id = request.GET.get('q', '')
+    survey = SurveyDate.objects.get(pk=survey_id)
+    print(survey.pipe_id_fk.id)
+    points = SurveyPoint.objects.all()
+    geoms = []
 
-    if map_id != '':
-        company_slug = map_id.split('_')[0]  # Company Name
-        pipe_slug = map_id.split('_')[1]  # pipe name preserving spaces
-        pipe_comp = pipe_slug.split()[0] + pipe_slug.split()[
-            1]  # pipe name eliminating spaces to allow for pass through to JS
-        date_slug = map_id.split('_')[2]  # date format in yyyy-mm-dd
-    else:
-        company_slug, pipe_slug, date_slug = '', '', ''
+    for point in points:
+        GasReading = point.gas_value
+        xcoord = point.gas_geom.coords[0]
+        ycoord = point.gas_geom.coords[1]
+        geoms.append((GasReading, xcoord, ycoord))
 
-    print("the mapid is: ", map_id)
+    if survey.geometry_type == "PIPELINE":
+        pipeline = Pipeline.objects.get(pk=survey.pipe_id_fk.id)
+        name = pipeline.pipe_name
+        allcoords = [[coord[0], coord[1]] for coord in pipeline.pipe_geom.coords]
+        context = {'points': geoms, 'name': name, 'linecoords': allcoords, 'infcoords': []}
 
-    context = {'company_slug': company_slug, 'pipe_slug': pipe_slug, 'date_slug': date_slug, 'survey_name': map_id,
-               'pipe_comp': pipe_comp}
+
+
+
+
+
+
+
 
     return render(request, 'gas_survey.html', context)
 
 
-class GetPipelineData(APIView):
 
-    def get(self, request, format=None):
-        pipeline_objects = Pipeline.objects.all()
-        pipe_data = {}
-        for object in pipeline_objects:
-            header = {"type": "FeatureCollection", "name": object.pipe_name,
-                      "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::4326"}},
-                      "features": [{"type": "Feature", "properties": {"name": object.pipe_name},
-                                    "geometry": {"type": "MultiLineString", "coordinates": [[point for point in object.pipe_geom]]}}]}
-
-            pipe_data[object.pipe_name] = object.pipe_geom
-
-        return Response(header)
-
-def MapView(request):
-    return render(request, 'map.html')
