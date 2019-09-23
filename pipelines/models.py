@@ -60,9 +60,11 @@ class SurveyDate(models.Model):
         return "{}_{}_{}".format(client_slug, self.pipe_id_fk, self.survey_date)
 
 class SurveyPoint(models.Model):
-    surveydate_id_fk = models.ForeignKey(SurveyDate, on_delete=models.CASCADE, related_name="surveypoint")
+    surveydate_id_fk = models.ForeignKey(SurveyDate, on_delete=models.CASCADE, related_name="surveypoint", null=True)
     gas_value = models.FloatField()
-    gas_geom = models.PointField()
+    gas_geom = models.PointField(null=True)
+    gas_lat = models.CharField(max_length=50, null=True)
+    gas_long = models.CharField(max_length=50, null=True)
 
     def __str__(self):
         return self.gas_value
