@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
-from django.views.generic.base import TemplateView
 from .views import index_redirect
 from djgeojson.views import GeoJSONLayerView
+from django.conf import settings # new
+from django.conf.urls.static import static # new
 
 urlpatterns = [
     path('', index_redirect),
@@ -26,3 +26,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('pipelines/', include('django.contrib.auth.urls')),
 ]
+
+if settings.DEBUG: # new
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

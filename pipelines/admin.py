@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import *
-from .models import CustomUser, Client, Pipeline, SurveyDate
+from .models import *
 
 
 class CustomUserAdmin(UserAdmin):
@@ -51,3 +51,4 @@ admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Client, CustomClientAdmin)
 admin.site.register(Pipeline, CustomPipelineAdmin)
 admin.site.register(SurveyDate)
+admin.site.register(Deficiency)

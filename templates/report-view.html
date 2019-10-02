@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block headcontent %}
+
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h1>Report Results {{survey.survey_date}}</h1>
+<hr>
+<h3>Prepared for {{survey.client_id_fk}}</h3>
+<hr>
+<table class="info-table">
+    <tr>
+        <th>Location: </th>
+        <td>{{ name }} </td>
+    </tr>
+    <tr>
+        <th>Location Type: </th>
+        <td>{{survey.get_geometry_type_display}}</td>
+    </tr>
+    <tr>
+        <th>Wind Direction: </th>
+        <td>{{survey.wind_direction}}</td>
+    </tr>
+    <tr>
+        <th>Temperature: </th>
+        <td>{{survey.temperature}}</td>
+    </tr>
+    <tr>
+        <th>Flight Duration: </th>
+        <td>{{survey.flight_duration}}</td>
+    </tr>
+
+</table>
+<hr>
+<h2>Map of Findings</h2>
+<p>iFrame of map goes here</p>
+<hr>
+<h2>Possible Leaks</h2>
+<table class="data-table">
+    <tr class="header">
+        <th>Tag Number</th>
+        <th>Gas Reading</th>
+        <th>Photo</th>
+    </tr>
+    {% for def in defs %}
+    <tr>
+        <td>{{def.deficiency_number}}</td>
+        <td>{{def.deficiency_gas}}</td>
+        <td><img id="{{def.deficiency_number}}" src="{{def.deficiency_photo.url}}" style="width:75px;"></td>
+
+        <!-- The Modal -->
+        <div id="myModal{{def.deficiency_number}}" class="modal">
+
+            <!-- The Close Button -->
+            <span class="close{{def.deficiency_number}}"
+                  style="position:absolute;top:15px;right:35px;color:#f1f1f1;font-size:40px;font-weight:bold;transition:0.3s;">&times;</span>
+
+            <!-- Modal Content (The Image) -->
+            <img class="modal-content" id="img0{{def.deficiency_number}}">
+
+        </div>
+        <script>
+    // Get the modal
+    var modal = document.getElementById("myModal{{def.deficiency_number}}");
+
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    var img = document.getElementById("{{def.deficiency_number}}");
+    var modalImg = document.getElementById("img0{{def.deficiency_number}}");
+    // var captionText = document.getElementById("caption");
+    img.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = this.src;
+    }
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close{{def.deficiency_number}}")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+        </script>
+    </tr>
+    <tr>
+        <td colspan="3">{{def.deficiency_desc}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p>You must be <a href="#">logged in</a> to see this data</p>
+{% endif %}
+{% endblock %}

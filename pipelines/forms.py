@@ -42,3 +42,9 @@ class SurveyDateForm(forms.ModelForm):
         super(SurveyDateForm,self).__init__(*args, **kwargs)
         self.fields['client_id_fk'].queryset = SurveyDate.objects.filter(client_id_fk=request.user.client_id_fk)
 
+
+class CreateReportForm(forms.ModelForm):
+    class Meta:
+        model = SurveyDate
+        fields = "__all__"
+

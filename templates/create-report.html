@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block headcontent %}
+<title>Site Name Goes Here</title>
+
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% if user.is_superuser %}
+<h1>Create New Report</h1>
+<hr>
+<form method="post">{% csrf_token %}
+    <p><input type="submit" value="Save"></p>
+    {{ header_form.as_p }}
+</form>
+
+{% endif %}
+{% endif %}
+{% endblock %}

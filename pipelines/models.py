@@ -11,7 +11,7 @@ class Client(models.Model):
     client_phone = models.CharField(max_length=10, null=True)
 
     def __str__(self):
-        return "{} | Client ID {:03d}".format(self.client_company, self.client_id)
+        return "{}".format(self.client_company)
 
 
 # add company ID field to the User model to pair with Client table.
@@ -26,6 +26,9 @@ class Pipeline(models.Model):
     client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE, null=True)
     pipe_name = models.CharField(max_length=20)
     pipe_geom = models.LineStringField(null=True)
+
+    def __str__(self):
+        return self.pipe_name
 
 
 class Infrastructure(models.Model):
@@ -42,22 +45,19 @@ class SurveyDate(models.Model):
         ("PIPELINE", "Pipeline"),
         ("SITE", "Site"),
     )
-    client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE)
+    client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='surveys')
     pipe_id_fk = models.ForeignKey(Pipeline, null=True, on_delete=models.CASCADE, blank=True)
     survey_date = models.DateField()
     inf_id_fk = models.ForeignKey(Infrastructure, null=True, on_delete=models.CASCADE, blank=True)
     geometry_type = models.CharField(max_length=8, choices=GEOMETRY_CHOICES)
+    wind_direction = models.CharField(max_length=3, null=True, blank=True)
+    temperature = models.PositiveSmallIntegerField(null=True, blank=True)
+    flight_duration = models.CharField(max_length=10, null=True, blank=True)
+    survey_comments = models.TextField(null=True, blank=True)
+
 
     def __str__(self):
-
-        # create a slug based off the returned foreign key from the client model
-        if str(self.client_id_fk).split()[1] != '|':
-            client_slug = str(self.client_id_fk).split()[0]+str(self.client_id_fk).split()[1]
-        else:
-            client_slug = str(self.client_id_fk).split()[0]
-
-        # return that slug along with the pipeline ID and date of survey for display and parsing into JS script
-        return "{}_{}_{}".format(client_slug, self.pipe_id_fk, self.survey_date)
+        return str(self.survey_date)
 
 class SurveyPoint(models.Model):
     surveydate_id_fk = models.ForeignKey(SurveyDate, on_delete=models.CASCADE, related_name="surveypoint", null=True)
@@ -68,3 +68,14 @@ class SurveyPoint(models.Model):
 
     def __str__(self):
         return self.gas_value
+
+
+class Deficiency(models.Model):
+    surveydate_id_fk = models.ForeignKey(SurveyDate, on_delete=models.CASCADE, related_name="surveydef")
+    deficiency_number = models.IntegerField()
+    deficiency_gas = models.FloatField()
+    deficiency_desc = models.TextField(null=True, blank=True)
+    deficiency_photo = models.ImageField(upload_to='images') # link to image uploaded to photos folder
+
+    def __str__(self):
+        return str(self.deficiency_number)

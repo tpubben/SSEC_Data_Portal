@@ -150,6 +150,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
+# Media settings
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # GDAL Library
 #GDAL_LIBRARY_PATH = r'C:\OSGeo4W64\share\gdal'

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.gis.geos import GEOSGeometry
 
-from .forms import CustomUserCreationForm, SurveyDateForm
+from .forms import *
 from .models import *
 
 
@@ -25,21 +25,35 @@ def index(request):
     return render(request, 'index.html')
 
 
-def ReportView(request):
+def ReportList(request):
     # form = SurveyDateForm(request)
+    user = request.user
     try:
         client_id = request.user.client_id_fk
     except:
         client_id = 0
-    report_list = SurveyDate.objects.filter(client_id_fk=client_id)
+    report_list = []
+    if user.is_superuser == True:
+        reports = SurveyDate.objects.all()
+    else:
+        reports = SurveyDate.objects.filter(client_id_fk=client_id)
+    for report in reports:
+        if report.geometry_type == "PIPELINE":
+            site_name = report.pipe_id_fk
+        elif report.geometry_type == "SITE":
+            site_name = report.inf_id_fk
+        else:
+            site_name = 'NA'
+        report_list.append(
+            {"name": site_name, "date": report.survey_date, "id": report.id, "company": report.client_id_fk})
+
     context = {'report_list': report_list}
     # form.fields['pipe_id_fk'].queryset = SurveyDate.objects.filter(client_id_fk=client_id)
 
-    return render(request, 'report_view.html', context)
+    return render(request, 'report-list.html', context)
 
 
 def MapView(request, survey_id):
-
     # This is where we pull information from the URL using a parameter get request.
     survey = SurveyDate.objects.get(pk=survey_id)
     print(survey.pipe_id_fk.id)
@@ -69,4 +83,33 @@ def MapView(request, survey_id):
     return render(request, 'gas_survey.html', context)
 
 
+def ReportView(request, survey_id):
+    survey = SurveyDate.objects.get(pk=survey_id)
+    user = request.user
+    if user.is_anonymous:
+        return redirect('login')
+    if user.client_id_fk == survey.client_id_fk or user.is_superuser == True:
+        if survey.geometry_type == "PIPELINE":
+            name = survey.pipe_id_fk.pipe_name
+        elif survey.geometry_type == "SITE":
+            name = survey.inf_id_fk.inf_name
+        else:
+            name = "Unknown Location"
 
+
+        deficiencies = survey.surveydef.all()
+
+        context = {'defs': deficiencies, 'survey':survey, 'name': name}
+
+        return render(request, 'report-view.html', context)
+    else:
+        return redirect('login')
+
+def CreateReport(request):
+    if request.method == 'POST':
+        header_form = CreateReportForm(request.POST)
+        if header_form.is_valid():
+            header_form.save()
+    else:
+        header_form = CreateReportForm()
+    return render(request, 'create-report.html', {'header_form': header_form})

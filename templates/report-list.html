@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block headcontent %}
+
+{% endblock %}
+{% block content %}
+<div class="clientinfo">
+    <h1>Site reports</h1>
+    {% if user.is_authenticated %}
+    <p></p>
+    <input type="text" id="findInput" onkeyup="myFunction()" placeholder="Search for names..">
+    <table id="findTable">
+        <caption>Reports are listed by site name and date the survey was completed.</caption>
+        <tr class="header">
+            {% if user.is_superuser %}
+            <th>Client</th>
+            {% endif %}
+            <th>Site Name</th>
+            <th>Survey Date</th>
+            <th></th>
+            {% if user.is_superuser %}
+            <th></th>
+            {% endif %}
+        </tr>
+        {% for report in report_list %}
+        <tr>
+            {% if user.is_superuser %}
+            <td>{{ report.company }}</td>
+            {% endif %}
+            <td>{{ report.name }}</td>
+            <td>{{ report.date }}</td>
+            <td><a href="{% url 'report_view' report.id %}">View</a></td>
+            {% if user.is_superuser %}
+            <td><a href="#">Edit</a></td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    Login to see your data.
+    {% endif %}
+
+</div>
+
+<script>
+function myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("findInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("findTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    tds = tr[i].getElementsByTagName("td")[0];
+    if (tds) {
+      txtValue = tds.textContent || tds.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+{% endblock %}
