@@ -143,7 +143,7 @@
    /* Add a search icon to input */
   background-position: 10px 12px; /* Position the search icon */
   background-repeat: no-repeat; /* Do not repeat the icon image */
-  width: 80%; /* Full-width */
+  width: 100%; /* Full-width */
   font-size: 16px; /* Increase font-size */
   padding: 12px 20px 12px 40px; /* Add some padding */
   border: 1px solid #ddd; /* Add a grey border */
@@ -152,7 +152,7 @@
 
 #findTable {
   border-collapse: collapse; /* Collapse borders */
-  width: 80%; /* Full-width */
+  width: 100%; /* Full-width */
   border: 1px solid #ddd; /* Add a grey border */
   font-size: 18px; /* Increase font-size */
 }
@@ -254,4 +254,72 @@
 
 .info-table th {
     padding-right: 4px;
+}
+
+ul.messages {
+    list-style-type:none;
+    background-color:#4CAF50;
+    font-weight: bold;
+    color: white;
+    padding: 4px;
+}
+
+.button {
+    background-color: #494949;
+    border: none;
+    padding: 3px;
+    font-weight: bold;
+    color: white;
+}
+
+
+.button:hover {
+    background-color:#4CAF50;
+    transition: 0.3s;
+}
+
+
+a.button {
+    padding-top:6px;
+    padding-bottom:6px;
+}
+
+
+a.button:hover {
+    text-decoration: none;
+    color: white;
+}
+
+
+.home-button {
+    background-color: #4CAF50;
+    border: none;
+    padding: 3px;
+    font-weight: bold;
+    color: white;
+    transition: 0.3s;
+}
+
+
+.home-button:hover {
+    background-color:#494949;
+    transition: 0.3s;
+}
+
+
+a.home-button {
+    padding-top:6px;
+    padding-bottom:6px;
+}
+
+
+a.home-button:hover {
+    text-decoration: none;
+    color: white;
+}
+
+@media only screen and (min-width:768px) {
+    /* for desktop */
+    #leaks {width:50%;float:right;}
+    #info {width:50%;float:left;}
 }

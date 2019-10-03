@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block headcontent %}
-<title>Edit Report</title>
+<title>Site Name Goes Here</title>
 
 {% endblock %}
 
@@ -10,21 +10,40 @@
 {% if user.is_superuser %}
 
 <h1>Edit Report</h1>
-<h2>Survey Information</h2>
+<p><a href="{%url 'index'%}" class="home-button">Return To Report List</a></p>
 <hr>
-<h1>Gas Leaks</h1>
-<a href="#">Add New</a>
+<div id="info">
+    <h2>Survey Info</h2>
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post">{% csrf_token %}
+    <p><input type="submit" value="Save" class="button"></p>
+    {{ header_form.as_p }}
+</form>
+</div>
+
+<div id="leaks">
+    <h2>Detected Leaks</h2>
+    <p><a href="{% url 'add_leak' survey_id%}" class="button">Add Leak</a></p>
 <table class="data-table">
     <tr class="header">
         <th>Tag Number</th>
         <th>Gas Reading</th>
         <th>Photo</th>
+        <th></th>
     </tr>
     {% for def in defs %}
     <tr>
         <td>{{def.deficiency_number}}</td>
         <td>{{def.deficiency_gas}}</td>
         <td><img id="{{def.deficiency_number}}" src="{{def.deficiency_photo.url}}" style="width:75px;"></td>
+        <td><a href="{% url 'delete_leak' def.surveydate_id_fk.id def.id %}">Delete</a></td>
 
         <!-- The Modal -->
         <div id="myModal{{def.deficiency_number}}" class="modal">
@@ -64,6 +83,8 @@
     </tr>
     {% endfor %}
 </table>
+</div>
+
 
 {% endif %}
 {% endif %}

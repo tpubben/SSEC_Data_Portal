@@ -6,6 +6,8 @@
 
 {% block content %}
 {% if user.is_authenticated %}
+<p></p>
+<p><a href="{%url 'index'%}" class="home-button">Return To Report List</a></p>
 <h1>Report Results {{survey.survey_date}}</h1>
 <hr>
 <h3>Prepared for {{survey.client_id_fk}}</h3>

@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.views import generic
+from django.contrib import messages
 from django.template import loader
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -106,10 +105,74 @@ def ReportView(request, survey_id):
         return redirect('login')
 
 def CreateReport(request):
+    user = request.user
+    if user.is_anonymous:
+        return redirect('login')
+    if not user.is_superuser:
+        return redirect('index')
     if request.method == 'POST':
         header_form = CreateReportForm(request.POST)
         if header_form.is_valid():
-            header_form.save()
+            new_survey = header_form.save()
+            survey_id = new_survey.id
+            return redirect('edit_report', survey_id=survey_id)
     else:
         header_form = CreateReportForm()
     return render(request, 'create-report.html', {'header_form': header_form})
+
+
+def EditReport(request, survey_id):
+    user = request.user
+    if user.is_anonymous:
+        return redirect('login')
+    if not user.is_superuser:
+        return redirect('index')
+    context = {'survey_id': survey_id}
+    survey_obj = SurveyDate.objects.get(pk=survey_id)
+    deficiencies = survey_obj.surveydef.all()
+    context['defs'] = deficiencies
+    if request.method == 'POST':
+        header_form = CreateReportForm(request.POST, instance=survey_obj)
+        if header_form.is_valid():
+            header_form.save()
+            now = datetime.datetime.now()
+            messages.add_message(request, messages.INFO, 'Last saved at {}'.format(now.strftime("%H:%M:%S")))
+            return redirect('edit_report', survey_id=survey_id)
+    else:
+        header_form = CreateReportForm(instance=survey_obj)
+
+    context['header_form'] = header_form
+
+    return render(request, 'edit-report.html', context)
+
+
+def AddLeak(request, survey_id):
+    user = request.user
+    if user.is_anonymous:
+        return redirect('login')
+    if not user.is_superuser:
+        return redirect('index')
+    context = {}
+
+    if request.method == 'POST':
+        form = LeakForm(request.POST, request.FILES, initial={'surveydate_id_fk': survey_id})
+        if form.is_valid():
+            form.save()
+            return redirect('edit_report', survey_id=survey_id)
+    else:
+        form = LeakForm(initial={'surveydate_id_fk': survey_id})
+
+    context['form'] = form
+
+    return render(request, 'create-leak.html', context)
+
+
+def DeleteLeak(request, survey_id, leak_id):
+    user = request.user
+    if not user.is_superuser:
+        return redirect('index')
+
+    leak = Deficiency.objects.get(pk=leak_id)
+    leak.delete()
+
+    return redirect('edit_report', survey_id=survey_id)

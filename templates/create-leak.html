@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block headcontent %}
+<title>Create Leak</title>
+
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% if user.is_superuser %}
+<h1>Add New Leak</h1>
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+    <p><input type="submit" value="Save" class="button"></p>
+    {{ form.as_p }}
+</form>
+
+{% endif %}
+{% endif %}
+{% endblock %}

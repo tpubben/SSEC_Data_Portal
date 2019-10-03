@@ -57,7 +57,7 @@ class SurveyDate(models.Model):
 
 
     def __str__(self):
-        return str(self.survey_date)
+        return "{} | {}".format(str(self.survey_date), str(self.client_id_fk))
 
 class SurveyPoint(models.Model):
     surveydate_id_fk = models.ForeignKey(SurveyDate, on_delete=models.CASCADE, related_name="surveypoint", null=True)

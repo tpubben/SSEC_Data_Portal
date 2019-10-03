@@ -13,23 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path
 from . import views
 from django.views.generic.base import RedirectView, TemplateView
 from djgeojson.views import GeoJSONLayerView
-from django.contrib import admin
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.ReportList, name='index'),
     path('signup/', views.SignUp.as_view(), name='signup'),
     path('reports/', views.ReportList, name='report_list'),
     path('mapview/<int:survey_id>/', views.MapView, name='map_view'),
     path('map/', TemplateView.as_view(template_name='map.html')),
     path('reportview/<int:survey_id>/', views.ReportView, name='report_view'),
     path('createreport/', views.CreateReport, name='create_report'),
+    path('editreport/<survey_id>/', views.EditReport, name='edit_report'),
+    path('editreport/<survey_id>/addleak', views.AddLeak, name='add_leak'),
+    path('editreport/<survey_id>/<leak_id>/', views.DeleteLeak, name='delete_leak'),
 
 ]
 

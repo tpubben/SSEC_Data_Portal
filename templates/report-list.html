@@ -7,7 +7,9 @@
 <div class="clientinfo">
     <h1>Site reports</h1>
     {% if user.is_authenticated %}
-    <p></p>
+    <p>{% if request.user.is_superuser %}
+        <a href="{% url 'create_report' %}" class="button">Create Report</a>
+    {% endif %}</p>
     <input type="text" id="findInput" onkeyup="myFunction()" placeholder="Search for names..">
     <table id="findTable">
         <caption>Reports are listed by site name and date the survey was completed.</caption>
@@ -31,7 +33,7 @@
             <td>{{ report.date }}</td>
             <td><a href="{% url 'report_view' report.id %}">View</a></td>
             {% if user.is_superuser %}
-            <td><a href="#">Edit</a></td>
+            <td><a href="{% url 'edit_report' report.id %}">Edit</a></td>
             {% endif %}
         </tr>
         {% empty %}

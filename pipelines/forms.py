@@ -3,7 +3,7 @@ import datetime
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib import admin
-from .models import CustomUser, Client, SurveyDate
+from .models import *
 
 class CustomUserCreationForm(UserCreationForm):
 
@@ -48,3 +48,9 @@ class CreateReportForm(forms.ModelForm):
         model = SurveyDate
         fields = "__all__"
 
+
+class LeakForm(forms.ModelForm):
+    class Meta:
+        model = Deficiency
+        fields = "__all__"
+        widgets = {"surveydate_id_fk": forms.HiddenInput()}
