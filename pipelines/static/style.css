@@ -318,8 +318,18 @@ a.home-button:hover {
     color: white;
 }
 
+
 @media only screen and (min-width:768px) {
     /* for desktop */
     #leaks {width:50%;float:right;}
     #info {width:50%;float:left;}
+}
+
+
+#map {
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 400px;
+    width: 100%;
+    max-width: 750px;
 }

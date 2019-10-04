@@ -67,7 +67,7 @@ class SurveyPoint(models.Model):
     gas_long = models.CharField(max_length=50, null=True)
 
     def __str__(self):
-        return self.gas_value
+        return str(self.gas_value)
 
 
 class Deficiency(models.Model):

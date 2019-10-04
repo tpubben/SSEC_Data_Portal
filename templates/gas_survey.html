@@ -19,24 +19,13 @@
 </head>
 
 <body>
-<div id="MapTitle">SSEC Methane Mapping Service - {{ name }}</div>
-<style>
-          #MapTitle {
-              margin-bottom: 5px;
-              background-color: #494949;
-              color: white;
-              font-family: Arial;
-              font-size: 30px;
-              font-weight: bold;
-              text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-
-</style>
 <div id="map"></div>
 <style>
           #map {
               border-style: double;
               border-width: 7;
               border-radius: 10px;
+              height: 180px;
           }
 
 </style>
@@ -121,6 +110,5 @@ displaymap (gas, pipe)
 <!-- <script src="{% static 'gasmap.js' %}" type="text/javascript" workspace={{ company_slug }} pipeline={{ pipe_comp }}
         date={{ date_slug }}></script>-->
 
-<div></div>
 </body>
 </html>

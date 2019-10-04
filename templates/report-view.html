@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block headcontent %}
-
+<!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin=""/>
+    <!-- Leaflet JS. Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+            integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+            crossorigin=""></script>
+    <script src="https://code.jquery.com/jquery-2.1.3.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -37,7 +45,9 @@
 </table>
 <hr>
 <h2>Map of Findings</h2>
-<p>iFrame of map goes here</p>
+
+<div id="map"></div>
+
 <hr>
 <h2>Possible Leaks</h2>
 <table class="data-table">
@@ -69,11 +79,14 @@
 
     // Get the image and insert it inside the modal - use its "alt" text as a caption
     var img = document.getElementById("{{def.deficiency_number}}");
+    var mapDiv = document.getElementById("map");
     var modalImg = document.getElementById("img0{{def.deficiency_number}}");
     // var captionText = document.getElementById("caption");
     img.onclick = function(){
       modal.style.display = "block";
       modalImg.src = this.src;
+      // hide the map
+      mapDiv.style.display = 'none';
     }
 
     // Get the <span> element that closes the modal
@@ -82,6 +95,7 @@
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
       modal.style.display = "none";
+      mapDiv.style.display = "block";
     }
         </script>
     </tr>
@@ -90,6 +104,83 @@
     </tr>
     {% endfor %}
 </table>
+
+
+<script>
+
+    var gas = [{
+        "type": "FeatureCollection",
+        "name": "GasSample",
+        "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+        "features": [
+        {% for point in points %}
+            { "type": "Feature", "properties": {"GasReading": {{point.0}}}, "geometry": { "type" : "MultiPoint", "coordinates": [ [  {{point.1}}, {{point.2}} ] ] } },
+        {% endfor %}
+    ]
+    }];
+
+    var pipe = [{
+        "type": "FeatureCollection",
+        "name": "{{ name }}",
+        "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+        "features": [
+            {"type": "Feature", "geometry": { "type": "MultiLineString", "coordinates": [ {{ linecoords }} ]
+    }}]
+    }];
+
+    var site = []
+
+    var map = L.map('map').setView([53, -115], 6);
+
+    // Add mapbox basemaps as a group so they can be properly added to the layer control
+    var mapbox = ({
+
+        'Streets': L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3B1YmJlbiIsImEiOiJjanV1NnZudngwZnR6M3lwaGxzemd6MjE3In0.9bfM9SkEGnTZJN11T3FoOw'
+                            ).addTo(map)
+        });
+
+    // Add each data variable to a geojson layer
+    var gaslayer = L.geoJson(gas, {
+        onEachFeature: function(feature, gaslayer) {
+            if (feature.properties && feature.properties.GasReading && feature.geometry.coordinates) {
+                gaslayer.bindPopup('<h3>Gas (PPMM): '+feature.properties.GasReading+'</h3>' + 'Location (Long, Lat): ' + feature.geometry.coordinates, {closeButton: true})
+                gaslayer.on('mouseover', function() {
+                    gaslayer.openPopup();
+                })
+            }
+        },
+
+
+    }).addTo(map);
+
+    var pipestyle = {
+        "color": "#228B22",
+        "weight": "5",
+        "opacity": "1"
+    }
+
+    // Use a try/except to add optional layers
+    var pipelayer = L.geoJson(pipe, {style: pipestyle}).addTo(map);
+
+    var sitelayer = L.geoJson(site).addTo(map);
+
+
+    // Group layers under 'survey'
+    var survey = {
+        "Gas Survey": gaslayer,
+        "Pipeline": pipelayer,
+        "Site": sitelayer
+    };
+
+    // Add Layer control, scale, and center map on gas survey
+    map.fitBounds(gaslayer.getBounds());
+    L.control.layers(null, survey,{collapsed:false}).addTo(map);
+    L.control.scale().addTo(map);
+    // change leaflet attribution to custom
+    document.getElementsByClassName('leaflet-control-attribution')[0].innerHTML = 'Powered by Leaflet<br>&copy; Silver Spring Energy Consulting Ltd.';
+    document.getElementsByClassName('leaflet-control-attribution')[0].style.textAlign = 'right';
+
+</script>
 
 {% else %}
 <p>You must be <a href="#">logged in</a> to see this data</p>

@@ -88,17 +88,38 @@ def ReportView(request, survey_id):
     if user.is_anonymous:
         return redirect('login')
     if user.client_id_fk == survey.client_id_fk or user.is_superuser == True:
+        context = {}
+        deficiencies = survey.surveydef.all()
+        context['defs'] = deficiencies
+        context['survey'] = survey
+        points = SurveyPoint.objects.all()
+        geoms = []
+
+        for point in points:
+            GasReading = point.gas_value
+            print(GasReading)
+            xcoord = point.gas_geom.coords[0]
+            ycoord = point.gas_geom.coords[1]
+            geoms.append((GasReading, xcoord, ycoord))
+
         if survey.geometry_type == "PIPELINE":
+            pipeline = Pipeline.objects.get(pk=survey.pipe_id_fk.id)
             name = survey.pipe_id_fk.pipe_name
+            allcoords = [[coord[0], coord[1]] for coord in pipeline.pipe_geom.coords]
+            context['points'] = geoms
+            context['name'] = name
+            context['linecoords'] = allcoords
+            context['infcoords'] = []
         elif survey.geometry_type == "SITE":
-            name = survey.inf_id_fk.inf_name
+            site = Infrastructure.objects.get(pk=survey.inf_id_fk_id)
+            sitename = survey.inf_id_fk.inf_name
+            infcoords = [[coord[0], coord[1]] for coord in site.inf_geom.coords]
+            context['points'] = geoms
+            context['name'] = sitename
+            context['linecoords'] = []
+            context['infcoords'] = infcoords
         else:
             name = "Unknown Location"
-
-
-        deficiencies = survey.surveydef.all()
-
-        context = {'defs': deficiencies, 'survey':survey, 'name': name}
 
         return render(request, 'report-view.html', context)
     else:

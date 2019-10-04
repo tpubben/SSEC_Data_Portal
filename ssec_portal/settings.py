@@ -16,6 +16,7 @@ import os
 with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),'password.txt'), 'r') as pw_file:
     hidden_db_password = pw_file.read().strip()
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,7 +25,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'x#+n0$4k5f#x)mw5*!z%ct^1sk*x$1fsqr_4kijr5=y!b_tl4l'
+with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),'secretkey.txt'), 'r') as pw_file:
+    SECRET_KEY = pw_file.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
