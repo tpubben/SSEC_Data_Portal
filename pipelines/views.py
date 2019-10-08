@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib import messages
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from django.template import loader
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,6 +11,7 @@ from django.contrib.gis.geos import GEOSGeometry
 
 from .forms import *
 from .models import *
+from .extra_logic import *
 
 
 # Create your views here.
@@ -22,6 +25,23 @@ class SignUp(generic.CreateView):
 
 def index(request):
     return render(request, 'index.html')
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/change_password.html', {
+        'form': form
+    })
 
 
 def ReportList(request):
@@ -97,7 +117,6 @@ def ReportView(request, survey_id):
 
         for point in points:
             GasReading = point.gas_value
-            print(GasReading)
             xcoord = point.gas_geom.coords[0]
             ycoord = point.gas_geom.coords[1]
             geoms.append((GasReading, xcoord, ycoord))
@@ -113,7 +132,8 @@ def ReportView(request, survey_id):
         elif survey.geometry_type == "SITE":
             site = Infrastructure.objects.get(pk=survey.inf_id_fk_id)
             sitename = survey.inf_id_fk.inf_name
-            infcoords = [[coord[0], coord[1]] for coord in site.inf_geom.coords]
+            coords = site.inf_geom.coords
+            infcoords = [coords[0], coords[1]]
             context['points'] = geoms
             context['name'] = sitename
             context['linecoords'] = []

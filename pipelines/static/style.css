@@ -291,6 +291,33 @@ a.button:hover {
 }
 
 
+.red-button {
+    background-color: #494949;
+    border: none;
+    padding: 3px;
+    font-weight: bold;
+    color: white;
+}
+
+
+.red-button:hover {
+    background-color:red;
+    transition: 0.3s;
+}
+
+
+a.red-button {
+    padding-top:6px;
+    padding-bottom:6px;
+}
+
+
+a.red-button:hover {
+    text-decoration: none;
+    color: white;
+}
+
+
 .home-button {
     background-color: #4CAF50;
     border: none;

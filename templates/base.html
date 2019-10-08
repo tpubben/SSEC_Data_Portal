@@ -18,11 +18,8 @@
                                       alt="Methane Survey Data Portal"></div>
         <div class="user">
             {% if user.is_authenticated %}
-            {% if request.user.is_superuser %}
-            <span style="font-size:80%">Hello: </span><span id="username">{{ user.username }}</span> | <a href="{% url 'logout' %}">logout</a>
-            {% else %}
-            <span style="font-size:80%">Hello: </span><span id="username">{{ user.username }}</span> | <a href="{% url 'logout' %}">logout</a>
-            {% endif %}
+            <span style="font-size:80%">Hello: </span><span id="username">{{ user.username }}</span> | <a href="{% url 'logout' %}">logout</a> |
+            <a href="{% url 'change_pw' %}">Change Password</a>
             {% else %}
             Please login or sign up:
             <a href="{% url 'login' %}">login</a> |

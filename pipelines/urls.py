@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.urls import path
 from . import views
+from .extra_logic import *
 from django.views.generic.base import RedirectView, TemplateView
 from djgeojson.views import GeoJSONLayerView
 
@@ -29,6 +30,9 @@ urlpatterns = [
     path('editreport/<survey_id>/', views.EditReport, name='edit_report'),
     path('editreport/<survey_id>/addleak', views.AddLeak, name='add_leak'),
     path('editreport/<survey_id>/<leak_id>/', views.DeleteLeak, name='delete_leak'),
+    path('repair/<survey_id>/<leak_id>/', mark_repaired, name='mark_repaired'),
+    path('undorepair/<survey_id>/<leak_id>/', mark_not_repaired, name='undo_repaired'),
+    path('password/', views.change_password, name='change_pw'),
 
 ]
 

@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 # Create your models here.
 
 
@@ -34,11 +35,12 @@ class Pipeline(models.Model):
 class Infrastructure(models.Model):
     inf_id = models.AutoField(primary_key=True)
     client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE)
-    inf_name = models.CharField(max_length=20)
+    inf_name = models.CharField(max_length=35)
     inf_geom = models.PointField(null=True)
 
     def __str__(self):
         return self.inf_name
+
 
 class SurveyDate(models.Model):
     GEOMETRY_CHOICES = (
@@ -55,9 +57,9 @@ class SurveyDate(models.Model):
     flight_duration = models.CharField(max_length=10, null=True, blank=True)
     survey_comments = models.TextField(null=True, blank=True)
 
-
     def __str__(self):
         return "{} | {}".format(str(self.survey_date), str(self.client_id_fk))
+
 
 class SurveyPoint(models.Model):
     surveydate_id_fk = models.ForeignKey(SurveyDate, on_delete=models.CASCADE, related_name="surveypoint", null=True)
@@ -75,7 +77,23 @@ class Deficiency(models.Model):
     deficiency_number = models.IntegerField()
     deficiency_gas = models.FloatField()
     deficiency_desc = models.TextField(null=True, blank=True)
-    deficiency_photo = models.ImageField(upload_to='images') # link to image uploaded to photos folder
+    deficiency_photo = models.ImageField(upload_to='images', null=True,
+                                         blank=True)  # link to image uploaded to photos folder
+    deficiency_thermal = models.ImageField(upload_to='images', null=True,
+                                           blank=True)  # spot for thermal images in future
+    deficiency_repaired = models.BooleanField(default=False)
+    deficiency_signoff = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.PROTECT,
+                                           related_name="inspector")
+    deficiency_signoff_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return str(self.deficiency_number)
+
+
+# a table to keep track of all changes in case a user marks something as repaired when it wasn't and tries to change it
+class DeficiencyHistory(models.Model):
+    surveydate_id_fk = models.ForeignKey(SurveyDate, on_delete=models.CASCADE)
+    history_leak_id = models.ForeignKey(Deficiency, on_delete=models.CASCADE, null=True, related_name='leakhistory')
+    history_action = models.CharField(max_length=15)
+    history_actor = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
+    history_date = models.DateField()
