@@ -34,7 +34,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
+            return redirect('index')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -144,6 +144,7 @@ def ReportView(request, survey_id):
         return render(request, 'report-view.html', context)
     else:
         return redirect('login')
+
 
 def CreateReport(request):
     user = request.user

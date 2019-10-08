@@ -18,6 +18,8 @@ from . import views
 from .extra_logic import *
 from django.views.generic.base import RedirectView, TemplateView
 from djgeojson.views import GeoJSONLayerView
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('', views.ReportList, name='index'),
@@ -34,5 +36,5 @@ urlpatterns = [
     path('undorepair/<survey_id>/<leak_id>/', mark_not_repaired, name='undo_repaired'),
     path('password/', views.change_password, name='change_pw'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
