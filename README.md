@@ -1,9 +1,6 @@
 **This application requires the following dependencies:**
 
   - Django
-  - Django-guardian
-  - GDAL
-  - PROJ4
 
 # Description
 
