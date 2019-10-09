@@ -57,6 +57,19 @@ def ReportList(request):
     else:
         reports = SurveyDate.objects.filter(client_id_fk=client_id)
     for report in reports:
+        # Check to see if there are any leaks
+        leaks = report.surveydef.all()
+        leak = 'none'
+        leak_check = 0
+        # check to see if there are any leaks. If so, assume repaired. If not repaired set variable to indicate leak.
+        if len(leaks) > 0:
+            leak = 'repd'
+            for item in leaks:
+                if item.deficiency_repaired == False:
+                    leak_check += 1
+        if leak_check > 0:
+            leak = 'leak'
+        complete = report.survey_complete
         if report.geometry_type == "PIPELINE":
             site_name = report.pipe_id_fk
         elif report.geometry_type == "SITE":
@@ -64,7 +77,8 @@ def ReportList(request):
         else:
             site_name = 'NA'
         report_list.append(
-            {"name": site_name, "date": report.survey_date, "id": report.id, "company": report.client_id_fk})
+            {"name": site_name, "date": report.survey_date, "id": report.id, "company": report.client_id_fk,
+             'complete': complete, 'leak': leak})
 
     context = {'report_list': report_list}
     # form.fields['pipe_id_fk'].queryset = SurveyDate.objects.filter(client_id_fk=client_id)

@@ -51,7 +51,7 @@ class LeakForm(forms.ModelForm):
         model = Deficiency
         fields = "__all__"
         widgets = {"surveydate_id_fk": forms.HiddenInput(), 'deficiency_signoff': forms.HiddenInput(),
-                   'deficiency_signoff_date': forms.HiddenInput()}
+                   'deficiency_signoff_date': forms.HiddenInput(), 'deficiency_repaired': forms.HiddenInput()}
 
 
 class EditLeakForm(forms.ModelForm):

@@ -9,7 +9,11 @@
     {% if user.is_authenticated %}
     <p>{% if request.user.is_superuser %}
         <a href="{% url 'create_report' %}" class="button">Create Report</a>
-    {% endif %}</p>
+        {% endif %}
+        <img src="{% static 'img/surv_fail.png' %}" style="width:20px;" title="Leaks Detected"> = Leaks Detected
+        <img src="{% static 'img/surv_rep.png' %}" style="width:20px;" title="Leaks Detected"> = Leaks Repaired
+        <img src="{% static 'img/surv_ok.png' %}" style="width:20px;" title="Leaks Detected"> = No Leaks
+    </p>
     <input type="text" id="findInput" onkeyup="myFunction()" placeholder="Search for names..">
     <table id="findTable">
         <caption>Reports are listed by site name and date the survey was completed.</caption>
@@ -19,10 +23,9 @@
             {% endif %}
             <th>Site Name</th>
             <th>Survey Date</th>
+            <th>Results</th>
             <th></th>
-            {% if user.is_superuser %}
             <th></th>
-            {% endif %}
         </tr>
         {% for report in report_list %}
         <tr>
@@ -31,10 +34,20 @@
             {% endif %}
             <td>{{ report.name }}</td>
             <td>{{ report.date }}</td>
-            <td><a href="{% url 'report_view' report.id %}">View</a></td>
-            {% if user.is_superuser %}
-            <td><a href="{% url 'edit_report' report.id %}">Edit</a></td>
-            {% endif %}
+            <td>{% if report.leak == "leak" %}
+                <img src="{% static 'img/surv_fail.png' %}" style="width:30px;" title="Leaks Detected">
+                {% elif report.leak == "none" %}
+                <img src="{% static 'img/surv_ok.png' %}" style="width:30px;" title="No Leaks">
+                {% else %}<img src="{% static 'img/surv_rep.png' %}" style="width:30px;" title="Leaks Repaired">
+                {% endif %}
+            </td>
+            <td>{% if report.complete %}Completed{% else %}Pending{% endif %}</td>
+            <td><a href="{% url 'report_view' report.id %}">View </a>
+                {% if user.is_superuser %}
+                |<a href="{% url 'edit_report' report.id %}"> Edit</a>
+                {% endif %}
+            </td>
+
         </tr>
         {% empty %}
         <tr>
@@ -72,5 +85,7 @@ function myFunction() {
     }
   }
 }
+
+
 </script>
 {% endblock %}

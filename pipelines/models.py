@@ -56,6 +56,7 @@ class SurveyDate(models.Model):
     temperature = models.PositiveSmallIntegerField(null=True, blank=True)
     flight_duration = models.CharField(max_length=10, null=True, blank=True)
     survey_comments = models.TextField(null=True, blank=True)
+    survey_complete = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} | {}".format(str(self.survey_date), str(self.client_id_fk))
