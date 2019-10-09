@@ -25,7 +25,6 @@
             <th>Survey Date</th>
             <th>Results</th>
             <th></th>
-            <th></th>
         </tr>
         {% for report in report_list %}
         <tr>
@@ -34,14 +33,17 @@
             {% endif %}
             <td>{{ report.name }}</td>
             <td>{{ report.date }}</td>
-            <td>{% if report.leak == "leak" %}
+            <td>{% if report.complete %}
+                {% if report.leak == "leak" %}
                 <img src="{% static 'img/surv_fail.png' %}" style="width:30px;" title="Leaks Detected">
                 {% elif report.leak == "none" %}
                 <img src="{% static 'img/surv_ok.png' %}" style="width:30px;" title="No Leaks">
                 {% else %}<img src="{% static 'img/surv_rep.png' %}" style="width:30px;" title="Leaks Repaired">
                 {% endif %}
+                {% else %}
+                Pending
+                {% endif %}
             </td>
-            <td>{% if report.complete %}Completed{% else %}Pending{% endif %}</td>
             <td><a href="{% url 'report_view' report.id %}">View </a>
                 {% if user.is_superuser %}
                 |<a href="{% url 'edit_report' report.id %}"> Edit</a>
