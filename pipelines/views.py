@@ -4,10 +4,7 @@ from django.views import generic
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from django.template import loader
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.contrib.gis.geos import GEOSGeometry
+
 
 from .forms import *
 from .models import *

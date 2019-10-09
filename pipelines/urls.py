@@ -16,8 +16,7 @@ Including another URLconf
 from django.urls import path
 from . import views
 from .extra_logic import *
-from django.views.generic.base import RedirectView, TemplateView
-from djgeojson.views import GeoJSONLayerView
+from django.views.generic.base import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
 
