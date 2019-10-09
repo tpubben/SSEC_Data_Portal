@@ -5,36 +5,19 @@
   - GDAL
   - PROJ4
 
-**Not intended for production work. Intended as proof of concept only. Record level security not implemented at this time.**
-
 # Description
 
-This is a Django application that uses and extended user model to allow clients to access reports and web maps stored on a server for
-their assets. Users log in and see a list of their pipelines and the associated reports/web maps.
+Web portal for our clients to log in and see any pipeline or site methane leak inspection results.
 
 ## Web Maps: 
 
-Geospatial data hosted on a Geoserver implementation using a Postgres 10.8 (with PostGIS extensions) back-end. 
-
-Web maps generated using Leaflet and the Geoserver WMS to serve raster tiles for survey data, pipeline location and raster base imagery
-(if supplied by client survey).
+Geospatial data stored in PostGIS database and accessed via Django model framework. GeoJson created on the fly for methane sensor points and geometries of client sites and pipelines. Displayed using customized leaflet web map.
 
 ## Reports:
 
-Stored as static flat files on the webserver.
+Reports are displayed using custom templates that allow our clients to mark down when they have repaired any detected leaks as well as allows for photos to be taken of pinpointed leaks so field personnel can identify and repair them in a timely fashion.
 
-## File and layer naming conventions
+New reports and new leaks can only be added by superusers as specified by the company implementing the portal.
 
-Files and geoserver data layers must be named according to a strict naming convention to ensure functionality:
+# Screenshots
 
-- ClientName_Pipeline Name_YYYY-MM-DD
-
-Where "ClientName" is the CamelCased concatenation of the first two words of a client's name. Eg:
-
-- Sample Gas Company Ltd. -> SampleGas
-- Gas Ltd. -> GasLtd
-
-## Passing variables into leaflet
-
-Variables are passed into Leaflet by pushing the filename to a URL variable and using HTTP Get to pull that variable out and pass the
-parsed values into the Javascript web map.
