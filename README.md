@@ -21,3 +21,12 @@ New reports and new leaks can only be added by superusers as specified by the co
 
 # Screenshots
 
+![Report List](Report_list.PNG?raw=true "Report List")
+
+![Edit Report](Edit_report_screenshot.PNG?raw=true "Edit Report")
+
+![Report View Unrepaired](Report_view_screenshot_not_repaired.PNG?raw=true "Report View Unrepaired Leak")
+
+![Report View Repaired](Report_view_screenshot_repaired.PNG?raw=true "Report View Repaired Leak")
+
+![Add Leak](Add_leak_screenshot.PNG?raw=true "Add Leak")
