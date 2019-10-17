@@ -57,9 +57,12 @@ class SurveyDate(models.Model):
     flight_duration = models.CharField(max_length=10, null=True, blank=True)
     survey_comments = models.TextField(null=True, blank=True)
     survey_complete = models.BooleanField(default=False)
+    survey_gas_point_geom = models.MultiPointField(null=True, blank=True, srid=4326, dim=3)
+    survey_gas_poly_geom = models.PolygonField(null=True, blank=True, srid=4326)
+
 
     def __str__(self):
-        return "{} | {}".format(str(self.survey_date), str(self.client_id_fk))
+        return "{} | {}".format(str(self.survey_date), str(self.inf_id_fk))
 
 
 class SurveyPoint(models.Model):

@@ -34,6 +34,8 @@ urlpatterns = [
     path('repair/<survey_id>/<leak_id>/', mark_repaired, name='mark_repaired'),
     path('undorepair/<survey_id>/<leak_id>/', mark_not_repaired, name='undo_repaired'),
     path('password/', views.change_password, name='change_pw'),
+    path('gasupload/', views.GasUpload, name='gasupload'),
+    path('gaspointAPI/', views.GasPointAPI.as_view()),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

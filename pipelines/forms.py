@@ -42,6 +42,7 @@ class CreateReportForm(forms.ModelForm):
     class Meta:
         model = SurveyDate
         fields = "__all__"
+        widgets = {"survey_gas_point_geom": forms.HiddenInput(), "survey_gas_poly_geom": forms.HiddenInput()}
 
 
 class LeakForm(forms.ModelForm):
@@ -57,3 +58,4 @@ class EditLeakForm(forms.ModelForm):
         model = Deficiency
         fields = ['deficiency_repaired', 'deficiency_signoff', 'deficiency_signoff_date']
         widgets = {'deficiency_signoff': forms.HiddenInput(), 'deficiency_signoff_date': forms.HiddenInput()}
+

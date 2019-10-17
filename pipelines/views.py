@@ -4,7 +4,11 @@ from django.views import generic
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-
+from rest_framework.renderers import JSONRenderer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.http import JsonResponse
+from django.core.serializers import serialize
 
 from .forms import *
 from .models import *
@@ -123,14 +127,7 @@ def ReportView(request, survey_id):
         deficiencies = survey.surveydef.all()
         context['defs'] = deficiencies
         context['survey'] = survey
-        points = SurveyPoint.objects.all()
         geoms = []
-
-        for point in points:
-            GasReading = point.gas_value
-            xcoord = point.gas_geom.coords[0]
-            ycoord = point.gas_geom.coords[1]
-            geoms.append((GasReading, xcoord, ycoord))
 
         if survey.geometry_type == "PIPELINE":
             pipeline = Pipeline.objects.get(pk=survey.pipe_id_fk.id)
@@ -181,7 +178,9 @@ def EditReport(request, survey_id):
     if not user.is_superuser:
         return redirect('index')
     context = {'survey_id': survey_id}
+    request.session['survey_id'] = survey_id
     survey_obj = SurveyDate.objects.get(pk=survey_id)
+    context["survey"] = survey_obj
     deficiencies = survey_obj.surveydef.all()
     context['defs'] = deficiencies
     if request.method == 'POST':
@@ -229,3 +228,56 @@ def DeleteLeak(request, survey_id, leak_id):
     leak.delete()
 
     return redirect('edit_report', survey_id=survey_id)
+
+def GasUpload(request):
+    from django.core.files.storage import FileSystemStorage
+    from django.contrib.gis.geos import MultiPoint, Point
+    import os
+    survey_id = request.session['survey_id']
+    survey = SurveyDate.objects.get(pk=survey_id)
+    if request.method == "POST" and request.FILES['gasfile']:
+        gasfile = request.FILES['gasfile']
+        fs = FileSystemStorage()
+        filename = fs.save(gasfile.name, gasfile)
+        filename = os.path.join("media/", filename)
+        print(survey.client_id_fk)
+        with open (filename, 'r') as gas:
+            gas = gas.readlines()
+            gasdata = []
+            for line in gas:
+                if not line.startswith("L"):
+                    line = line.strip().split(",")
+                    lat, long, gasvalue = line[0], line[1], line[2]
+                    gas_point = Point(x=float(long), y=float(lat), z=float(gasvalue))
+                    gasdata.append(gas_point)
+                else:
+                    continue
+
+            gas_mp = MultiPoint(gasdata)
+            survey.survey_gas_point_geom = gas_mp
+            survey.save()
+        return redirect("edit_report", survey_id=survey_id)
+
+    os.remove(filename)
+    return render(request, "gasupload.html")
+
+class GasPointAPI(APIView):
+
+    renderer_classes = [JSONRenderer]
+
+    def get(self, request, format=None):
+        survey_id = request.session['survey_id']
+        survey = SurveyDate.objects.get(pk=survey_id)
+        survey_mp = survey.survey_gas_point_geom.coords
+        print ("mp", survey_mp)
+        filtered_points = []
+        for point in survey_mp:
+            if point[2] < 100:
+                continue
+            else:
+                filtered_points.append(point)
+        print("filtered", filtered_points)
+
+        return JsonResponse(filtered_points, safe=False)
+
+

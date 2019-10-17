@@ -25,8 +25,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),'secretkey.txt'), 'r') as pw_file:
-    SECRET_KEY = pw_file.read().strip()
+# with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),'secretkey.txt'), 'r') as pw_file:
+SECRET_KEY = 'jalskaldfja889293'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pipelines.apps.PipelinesConfig',
     'django.contrib.gis',
+    'leaflet',
     'guardian',
     'rest_framework',
 ]
