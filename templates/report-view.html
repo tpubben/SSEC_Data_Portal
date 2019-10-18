@@ -137,10 +137,11 @@
                 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
                 "features": [
                     {"type": "Feature", "geometry": { "type": "MultiPoint", "coordinates": data
-            }}]
+                }}]
             }];
 
             var gasmap = L.map('map').setView([53, -115], 6);
+
             // Add mapbox basemaps as a group so they can be properly added to the layer control
             var mapbox = ({
                 'Streets': L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3B1YmJlbiIsImEiOiJjanV1NnZudngwZnR6M3lwaGxzemd6MjE3In0.9bfM9SkEGnTZJN11T3FoOw'
@@ -148,13 +149,48 @@
                 });
             // Add each data variable to a geojson layer
 
-            var gasstyle = {
-                "color": "#228B22",
-                "weight": "5",
-                "opacity": "1"
+
+            function PointColor (gasvalue) {
+                if (gasvalue > 1000) {
+                    i ++;
+                    return '#800026';
+                } else if (gasvalue > 750) {
+                    i ++;
+                    return '#BD0026';
+                } else if (gasvalue > 500) {
+                    i ++;
+                    return '#E31A1C';
+                } else if (gasvalue > 250) {
+                    i ++;
+                    return '#FC4E2A';
+                } else if (gasvalue > 125) {
+                    i ++;
+                    return '#FD8D3C';
+                } else if (gasvalue > 75) {
+                    i ++;
+                    return '#FEB24C';
+                } else if ( gasvalue > 10) {
+                    i ++;
+                    return '#FED976';
+                } else {i ++; return '#FFEDA0';}
             }
 
-            var gaslayer = L.geoJson(gasdata, {style: gasstyle}).addTo(gasmap);
+            function gasstyle (feature) {
+                return {
+                    // color: PointColor(feature.geometry.coordinates[i]),
+                    fillColor: PointColor(feature.geometry.coordinates[i][2]),
+                    weight: "0",
+                    radius: "5",
+                    fillOpacity: "1"
+                }
+            }
+
+            var i = 0
+            var gaslayer = L.geoJson(gasdata, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, gasstyle(feature))
+                    }
+            }).addTo(gasmap);
 
             // Group layers under 'survey'
             // Add Layer control, scale, and center map on gas survey
@@ -166,6 +202,29 @@
             }
 
             L.control.scale().addTo(gasmap);
+
+            // Add legend for gas color ramp
+            var legend = L.control({position: 'bottomright'});
+
+            legend.onAdd = function (gasmap) {
+
+                var div = L.DomUtil.create('div', 'info legend'),
+                    grades = [0, 10, 75, 125, 250, 500, 750, 1000],
+                    labels = [];
+
+                // loop through our density intervals and generate a label with a colored square for each interval
+                div.innerHTML += '<p>Methane (PPMM)</p>'
+                for (var k = 0; k < grades.length; k++) {
+                    div.innerHTML +=
+                        '<i style="background:' + PointColor(grades[k] + 1) + '"></i> ' +
+                        grades[k] + (grades[k + 1] ? '&ndash;' + grades[k + 1] + '<br>' : '+');
+                }
+
+                return div;
+            };
+
+            legend.addTo(gasmap);
+
             // change leaflet attribution to custom
             document.getElementsByClassName('leaflet-control-attribution')[0].innerHTML = 'Powered by Leaflet<br>&copy; Silver Spring Energy Consulting Ltd.';
             document.getElementsByClassName('leaflet-control-attribution')[0].style.textAlign = 'right';

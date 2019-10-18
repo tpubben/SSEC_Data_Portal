@@ -354,9 +354,28 @@ a.home-button:hover {
 
 
 #map {
-    border: 1px solid black;
+    border: 3px solid #BAB4AA;
+
     border-radius: 10px;
     height: 400px;
     width: 100%;
     max-width: 750px;
+}
+
+.legend {
+	line-height: 18px;
+	color: #555;
+	background-color: white;
+	padding: 5px;
+	border-radius: 5px;
+	border: #BAB4AA;
+	border-style: double;
+	border-width: 2px;
+}
+.legend i {
+	width: 18px;
+	height: 18px;
+	float: left;
+	margin-right: 8px;
+	opacity: 0.7;
 }
