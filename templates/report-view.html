@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block headcontent %}
+
 <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
           integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
@@ -14,7 +15,6 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<p></p>
 <p><a href="{%url 'index'%}" class="home-button">Return To Report List</a></p>
 <h1>Report Results {{survey.survey_date}}</h1>
 <hr>
@@ -46,6 +46,7 @@
 <p><b>Comments:</b></p>
 <p>{{survey.survey_comment}}</p>
 <hr>
+
 <h2>Map of Findings</h2>
 
 <div id="map"></div>
@@ -140,15 +141,7 @@
                 }}]
             }];
 
-            var gasmap = L.map('map').setView([53, -115], 6);
-
-            // Add mapbox basemaps as a group so they can be properly added to the layer control
-            var mapbox = ({
-                'Streets': L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3B1YmJlbiIsImEiOiJjanV1NnZudngwZnR6M3lwaGxzemd6MjE3In0.9bfM9SkEGnTZJN11T3FoOw'
-                                    ).addTo(gasmap)
-                });
-            // Add each data variable to a geojson layer
-
+            var gasmap = L.map('map', {maxZoom: 20}).setView([53, -115], 6);
 
             function PointColor (gasvalue) {
                 if (gasvalue > 1000) {
@@ -192,8 +185,7 @@
                     }
             }).addTo(gasmap);
 
-            // Group layers under 'survey'
-            // Add Layer control, scale, and center map on gas survey
+
             try {
                 gasmap.fitBounds(gaslayer.getBounds());
             }
@@ -224,6 +216,16 @@
             };
 
             legend.addTo(gasmap);
+
+
+            // Add mapbox basemaps as a group so they can be properly added to the layer control
+            var mapbox = ({
+                'Streets': L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3B1YmJlbiIsImEiOiJjanV1NnZudngwZnR6M3lwaGxzemd6MjE3In0.9bfM9SkEGnTZJN11T3FoOw'
+                                    ).addTo(gasmap)
+                });
+
+            // Add site imagery
+            imagery = L.tileLayer('http://127.0.0.1:8000/pipelines/{{ inf_image }}/{z}/{x}/{y}.png', {tms: true, maxZoom: 20}).addTo(gasmap)
 
             // change leaflet attribution to custom
             document.getElementsByClassName('leaflet-control-attribution')[0].innerHTML = 'Powered by Leaflet<br>&copy; Silver Spring Energy Consulting Ltd.';

@@ -9,6 +9,7 @@
     {% if user.is_authenticated %}
     <p>{% if request.user.is_superuser %}
         <a href="{% url 'create_report' %}" class="button">Create Report</a>
+        <a href="{% url 'infrastructure_list' %}" class="button">Edit Sites</a>
         {% endif %}
         <img src="{% static 'img/surv_fail.png' %}" style="width:20px;" title="Leaks Detected"> = Leaks Detected
         <img src="{% static 'img/surv_rep.png' %}" style="width:20px;" title="Leaks Detected"> = Leaks Repaired

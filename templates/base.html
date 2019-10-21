@@ -19,8 +19,8 @@
 </head>
 <header>
     <div class="header-container">
-        <div class="portaltitle"><img src="{% static 'pipelines/images/HeaderLogo.png' %}"
-                                      alt="Methane Survey Data Portal"></div>
+        <div class="portaltitle"><a href="{% url 'index' %}"><img src="{% static 'pipelines/images/HeaderLogo.png' %}"
+                                                                 alt="Methane Survey Data Portal"></a></div>
         <div class="user">
             {% if user.is_authenticated %}
             <span style="font-size:80%">Hello: </span><span id="username">{{ user.username }}</span> | <a href="{% url 'logout' %}">logout</a> |

@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse
 from django.core.serializers import serialize
+import datetime
 
 from .forms import *
 from .models import *
@@ -146,6 +147,7 @@ def ReportView(request, survey_id):
             context['name'] = sitename
             context['linecoords'] = []
             context['infcoords'] = infcoords
+            context['inf_image'] = site.inf_tile_url
         else:
             name = "Unknown Location"
 
@@ -256,10 +258,38 @@ def GasUpload(request):
             gas_mp = MultiPoint(gasdata)
             survey.survey_gas_point_geom = gas_mp
             survey.save()
+
         return redirect("edit_report", survey_id=survey_id)
 
-    os.remove(filename)
+
     return render(request, "gasupload.html")
+
+def EditSite(request, inf_id):
+    from django.core.files.storage import FileSystemStorage
+    from django.contrib.gis.geos import MultiPoint, Point
+    import os, zipfile
+    inf = Infrastructure.objects.get(pk=inf_id)
+    if request.method == "POST" and request.FILES['tilefile']:
+        tilefile = request.FILES['tilefile']
+        fs = FileSystemStorage()
+        tilename = fs.save(tilefile.name, tilefile)
+        tilename = os.path.join("media/", tilename)
+        unique_id = inf.inf_name.replace(" ", "")
+        inf.inf_tile_url = 'media/tiles/{}'.format(unique_id)
+        inf.save()
+
+        with zipfile.ZipFile(tilename, 'r') as file:
+            file.extractall(path='media/tiles/{}'.format(unique_id))
+        return redirect('index')
+    return render(request, "editsite.html")
+
+
+def ListInfrastructure(request):
+    all_infs = Infrastructure.objects.all()
+    context = {"inf_list": Infrastructure.objects.all()}
+    return render(request, "inf_list.html", context)
+
+
 
 class GasPointAPI(APIView):
 
@@ -269,14 +299,12 @@ class GasPointAPI(APIView):
         survey_id = request.session['survey_id']
         survey = SurveyDate.objects.get(pk=survey_id)
         survey_mp = survey.survey_gas_point_geom.coords
-        print ("mp", survey_mp)
         filtered_points = []
         for point in survey_mp:
             if point[2] < 100:
                 continue
             else:
                 filtered_points.append(point)
-        print("filtered", filtered_points)
 
         return JsonResponse(filtered_points, safe=False)
 

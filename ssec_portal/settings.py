@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'leaflet',
     'guardian',
     'rest_framework',
+    'wms',
 ]
 
 MIDDLEWARE = [

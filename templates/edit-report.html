@@ -10,7 +10,6 @@
 {% if user.is_superuser %}
 
 <h1>Edit Report</h1>
-{{ survey.survey_gas_point_geom }}
 <p><a href="{%url 'index'%}" class="home-button">Return To Report List</a></p>
 <hr>
 <div id="info">
@@ -30,6 +29,7 @@
 </div>
 
 <p><a href="{%url 'gasupload'%}" class="button">Upload Gas File</a></p>
+
 
 <div id="leaks">
     <h2>Detected Leaks</h2>

@@ -36,6 +36,9 @@ urlpatterns = [
     path('password/', views.change_password, name='change_pw'),
     path('gasupload/', views.GasUpload, name='gasupload'),
     path('gaspointAPI/', views.GasPointAPI.as_view()),
+    path('extract/<inf_id>', views.EditSite, name='tileupload'),
+    path('infrastructure_list/', views.ListInfrastructure, name='infrastructure_list'),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

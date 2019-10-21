@@ -37,6 +37,7 @@ class Infrastructure(models.Model):
     client_id_fk = models.ForeignKey(Client, on_delete=models.CASCADE)
     inf_name = models.CharField(max_length=35)
     inf_geom = models.PointField(null=True)
+    inf_tile_url = models.CharField(null=True, max_length=100, blank=True)
 
     def __str__(self):
         return self.inf_name
