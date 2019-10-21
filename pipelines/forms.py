@@ -42,7 +42,7 @@ class CreateReportForm(forms.ModelForm):
     class Meta:
         model = SurveyDate
         fields = "__all__"
-        widgets = {"survey_gas_point_geom": forms.HiddenInput(), "survey_gas_poly_geom": forms.HiddenInput()}
+        widgets = {"survey_gas_point_geom": forms.HiddenInput(), "survey_gas_poly_geom": forms.HiddenInput(), "survey_contour_geom": forms.HiddenInput()}
 
 
 class LeakForm(forms.ModelForm):

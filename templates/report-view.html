@@ -130,8 +130,8 @@
         dataType: 'json',
         success: function(data) {
 
-            console.log(data);
 
+            // Bring in JSON data
             var gasdata = [{
                 "type": "FeatureCollection",
                 "name": "{{ name }}",
@@ -141,7 +141,15 @@
                 }}]
             }];
 
+            var contourdata = [{{ survey.survey_contour_geom | safe }}];
+
+
+            // Initialize map container
             var gasmap = L.map('map', {maxZoom: 20}).setView([53, -115], 6);
+
+
+            // Create functions for styling gas points and contours
+            var i = 0
 
             function PointColor (gasvalue) {
                 if (gasvalue > 1000) {
@@ -178,12 +186,22 @@
                 }
             }
 
-            var i = 0
+            function contour_style (feature) {
+                return {
+                color: PointColor(feature.properties.GAS),
+                weight: 2
+                }
+            }
+
+
+            // Add data layers to map
             var gaslayer = L.geoJson(gasdata, {
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, gasstyle(feature))
                     }
-            }).addTo(gasmap);
+            });
+
+            var contourlayer = L.geoJson(contourdata, {style: contour_style}).addTo(gasmap);
 
 
             try {
@@ -193,30 +211,6 @@
                 // gasmap.fitBounds(sitelayer.getBounds());
             }
 
-            L.control.scale().addTo(gasmap);
-
-            // Add legend for gas color ramp
-            var legend = L.control({position: 'bottomright'});
-
-            legend.onAdd = function (gasmap) {
-
-                var div = L.DomUtil.create('div', 'info legend'),
-                    grades = [0, 10, 75, 125, 250, 500, 750, 1000],
-                    labels = [];
-
-                // loop through our density intervals and generate a label with a colored square for each interval
-                div.innerHTML += '<p>Methane (PPMM)</p>'
-                for (var k = 0; k < grades.length; k++) {
-                    div.innerHTML +=
-                        '<i style="background:' + PointColor(grades[k] + 1) + '"></i> ' +
-                        grades[k] + (grades[k + 1] ? '&ndash;' + grades[k + 1] + '<br>' : '+');
-                }
-
-                return div;
-            };
-
-            legend.addTo(gasmap);
-
 
             // Add mapbox basemaps as a group so they can be properly added to the layer control
             var mapbox = ({
@@ -224,8 +218,44 @@
                                     ).addTo(gasmap)
                 });
 
+
             // Add site imagery
             imagery = L.tileLayer('http://127.0.0.1:8000/pipelines/{{ inf_image }}/{z}/{x}/{y}.png', {tms: true, maxZoom: 20}).addTo(gasmap)
+
+
+            L.control.scale().addTo(gasmap);
+
+                // Add legend for gas color ramp
+            var legend = L.control({position: 'bottomright'});
+
+                legend.onAdd = function (gasmap) {
+
+                    var div = L.DomUtil.create('div', 'info legend'),
+                        grades = [0, 10, 75, 125, 250, 500, 750, 1000],
+                        labels = [];
+
+                    // loop through our density intervals and generate a label with a colored square for each interval
+                    div.innerHTML += '<p>Methane (PPMM)</p>'
+                    for (var k = 0; k < grades.length; k++) {
+                        div.innerHTML +=
+                            '<i style="background:' + PointColor(grades[k] + 1) + '"></i> ' +
+                            grades[k] + (grades[k + 1] ? '&ndash;' + grades[k + 1] + '<br>' : '+');
+                    }
+
+                    return div;
+                };
+
+                legend.addTo(gasmap);
+
+
+                // Add layer control
+                var maplayers = {
+                    "Gas Survey": gaslayer,
+                    "Gas Trends": contourlayer,
+                    "Site Imagery": imagery
+                }
+
+                group = L.control.layers(null, maplayers, {collapsed: false}).addTo(gasmap)
 
             // change leaflet attribution to custom
             document.getElementsByClassName('leaflet-control-attribution')[0].innerHTML = 'Powered by Leaflet<br>&copy; Silver Spring Energy Consulting Ltd.';

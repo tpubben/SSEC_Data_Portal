@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import JSONField
 
 
 # Create your models here.
@@ -60,6 +61,7 @@ class SurveyDate(models.Model):
     survey_complete = models.BooleanField(default=False)
     survey_gas_point_geom = models.MultiPointField(null=True, blank=True, srid=4326, dim=3)
     survey_gas_poly_geom = models.PolygonField(null=True, blank=True, srid=4326)
+    survey_contour_geom = JSONField(default="{}")
 
 
     def __str__(self):

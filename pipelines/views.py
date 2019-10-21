@@ -242,7 +242,6 @@ def GasUpload(request):
         fs = FileSystemStorage()
         filename = fs.save(gasfile.name, gasfile)
         filename = os.path.join("media/", filename)
-        print(survey.client_id_fk)
         with open (filename, 'r') as gas:
             gas = gas.readlines()
             gasdata = []
@@ -263,6 +262,34 @@ def GasUpload(request):
 
 
     return render(request, "gasupload.html")
+
+
+def UploadJSON(request):
+    import os
+    from django.core.files.storage import FileSystemStorage
+    survey_id = request.session['survey_id']
+    survey = SurveyDate.objects.get(pk=survey_id)
+    if request.method == "POST" and request.FILES['jsonfile']:
+        JSONfile = request.FILES['jsonfile']
+        fs = FileSystemStorage()
+        filename = fs.save(JSONfile.name, JSONfile)
+        filename = os.path.join("media/", filename)
+        with open (filename, 'r') as contours:
+            contours = contours.readlines()
+            contour_lines = ""
+            for line in contours:
+                line = line.strip()
+                contour_lines += line
+
+            survey.survey_contour_geom = contour_lines
+            survey.save()
+            print (survey.survey_contour_geom)
+
+        return redirect("edit_report", survey_id=survey_id)
+
+
+    return render(request, "JSONupload.html")
+
 
 def EditSite(request, inf_id):
     from django.core.files.storage import FileSystemStorage

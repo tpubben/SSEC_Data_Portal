@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div id="jsonfile">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p><input type="file" name="jsonfile"></p>
+        <p><button type="submit" class="button">Upload Contour File</button></p>
+    </form>
+</div>
+{% endblock %}
