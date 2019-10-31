@@ -41,8 +41,19 @@ class SurveyDateForm(forms.ModelForm):
 class CreateReportForm(forms.ModelForm):
     class Meta:
         model = SurveyDate
-        fields = "__all__"
-        widgets = {"survey_gas_point_geom": forms.HiddenInput(), "survey_gas_poly_geom": forms.HiddenInput(), "survey_contour_geom": forms.HiddenInput()}
+        exclude = ["survey_gas_point_geom","survey_gas_poly_geom", "survey_contour_geom"]
+        labels = {
+            "client_id_fk": "Client",
+            "pipe_id_fk": "Pipe",
+            "survey_date": "Date",
+            "inf_id_fk": "Name",
+            "geometry_type": "Site Type",
+            "wind_direction": "Wind Direction",
+            "flight_duration": "Flight Duration",
+            "survey_comments": "Comments",
+            "survey_complete": "Survey Complete"
+        }
+        # widgets = {"survey_gas_point_geom": forms.HiddenInput(), "survey_gas_poly_geom": forms.HiddenInput(), "survey_contour_geom": forms.HiddenInput()}
 
 
 class LeakForm(forms.ModelForm):

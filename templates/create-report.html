@@ -10,11 +10,22 @@
 {% if user.is_superuser %}
 <h1>Create New Report</h1>
 <hr>
-<form method="post">{% csrf_token %}
-    <p><input type="submit" value="Save"></p>
-    {{ header_form.as_p }}
-</form>
+<form method="post" id="create_form">{% csrf_token %}
 
+    <table class="formtable">
+        {% for field in header_form %}
+            <tr>
+                <th>{{ field.label_tag }}</th>
+                <td>{{ field }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <p><button type="submit" class="button">Save</button></p>
+</form>
+<script>
+    var linkID = document.getElementById("create");
+    linkID.className += "active";
+</script>
 {% endif %}
 {% endif %}
 {% endblock %}

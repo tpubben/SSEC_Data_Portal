@@ -1,22 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block headcontent %}
-
 {% endblock %}
+
 {% block content %}
+<!--
+<div class="topnav" id="baseTopnav">
+    <a href="{% url 'create_report' %}" class="button">Create Report</a>
+    <a href="{% url 'infrastructure_list' %}" class="button">Edit Sites</a>
+    <a href="javascript:void(0);" class="icon" onclick="reactiveTopnav()"></a>
+        <i class="fa fa-bars"></i>
+</div>-->
 <div class="clientinfo">
-    <h1>Site reports</h1>
+
+    <h3>Site Survey Reports</h3>
     {% if user.is_authenticated %}
-    <p>{% if request.user.is_superuser %}
-        <a href="{% url 'create_report' %}" class="button">Create Report</a>
-        <a href="{% url 'infrastructure_list' %}" class="button">Edit Sites</a>
-        {% endif %}
-        <img src="{% static 'img/surv_fail.png' %}" style="width:20px;" title="Leaks Detected"> = Leaks Detected
-        <img src="{% static 'img/surv_rep.png' %}" style="width:20px;" title="Leaks Detected"> = Leaks Repaired
-        <img src="{% static 'img/surv_ok.png' %}" style="width:20px;" title="Leaks Detected"> = No Leaks
-    </p>
-    <input type="text" id="findInput" onkeyup="myFunction()" placeholder="Search for names..">
-    <table id="findTable">
+
+    <input type="text" id="findInput" onkeyup="myFunction()" placeholder="Search for site names..">
+    <table id="findTable" width="100%">
         <caption>Reports are listed by site name and date the survey was completed.</caption>
         <tr class="header">
             {% if user.is_superuser %}
@@ -25,6 +26,7 @@
             <th>Site Name</th>
             <th>Survey Date</th>
             <th>Results</th>
+            <th>Actions</th>
             <th></th>
         </tr>
         {% for report in report_list %}
@@ -45,9 +47,9 @@
                 Pending
                 {% endif %}
             </td>
-            <td><a href="{% url 'report_view' report.id %}">View </a>
+            <td><a href="{% url 'report_view' report.id %}" class="button" style="margin-right: 5px; margin-bottom: 20px; padding:5px;">View</a>
                 {% if user.is_superuser %}
-                |<a href="{% url 'edit_report' report.id %}"> Edit</a>
+                <a href="{% url 'edit_report' report.id %}" class="button" style="padding:5px;">Edit</a>
                 {% endif %}
             </td>
 
@@ -64,6 +66,15 @@
     Login to see your data.
     {% endif %}
 
+</div>
+<div class="surv_icons" id="survicon">
+    <p>{% if request.user.is_superuser %}
+
+        {% endif %}
+        <img src="{% static 'img/surv_fail.png' %}" style="width:20px;" title="Leaks Detected"> = Leaks Detected
+        <img src="{% static 'img/surv_rep.png' %}" style="width:20px;" title="Leaks Detected"> = Leaks Repaired
+        <img src="{% static 'img/surv_ok.png' %}" style="width:20px;" title="Leaks Detected"> = No Leaks
+    </p>
 </div>
 
 <script>
@@ -91,4 +102,10 @@ function myFunction() {
 
 
 </script>
+
+<script>
+    var linkID = document.getElementById("list");
+    linkID.className += "active";
+</script>
 {% endblock %}
+{% block footercontent %}{% endblock %}

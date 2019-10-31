@@ -39,6 +39,8 @@ urlpatterns = [
     path('extract/<inf_id>', views.EditSite, name='tileupload'),
     path('infrastructure_list/', views.ListInfrastructure, name='infrastructure_list'),
     path('JSONupload/', views.UploadJSON, name='jsonupload'),
+    path('terms/', TemplateView.as_view(template_name='terms.html'), name='terms'),
+    path('privacy/', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
