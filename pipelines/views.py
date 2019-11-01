@@ -88,38 +88,9 @@ def ReportList(request):
     return render(request, 'report-list.html', context)
 
 
-def MapView(request, survey_id):
-    # This is where we pull information from the URL using a parameter get request.
-    survey = SurveyDate.objects.get(pk=survey_id)
-    print(survey.pipe_id_fk.id)
-    points = SurveyPoint.objects.all()
-    geoms = []
-
-    for point in points:
-        GasReading = point.gas_value
-        print(GasReading)
-        xcoord = point.gas_geom.coords[0]
-        ycoord = point.gas_geom.coords[1]
-        geoms.append((GasReading, xcoord, ycoord))
-
-    if survey.geometry_type == "PIPELINE":
-        pipeline = Pipeline.objects.get(pk=survey.pipe_id_fk.id)
-        name = pipeline.pipe_name
-        allcoords = [[coord[0], coord[1]] for coord in pipeline.pipe_geom.coords]
-        context = {'points': geoms, 'name': name, 'linecoords': allcoords, 'infcoords': []}
-    elif survey.geometry_type == "SITE":
-        site = Infrastructure.objects.get(pk=survey.inf_id_fk_id)
-        sitename = Infrastructure.inf_name
-        infcoords = [[coord[0], coord[1]] for coord in site.inf_geom.coords]
-        context = {'points': geoms, 'name': sitename, 'linecoords': [], 'infcoords': infcoords}
-    else:
-        pass
-
-    return render(request, 'gas_survey.html', context)
-
-
 def ReportView(request, survey_id):
     survey = SurveyDate.objects.get(pk=survey_id)
+    request.session['survey_id'] = survey_id
     user = request.user
     if user.is_anonymous:
         return redirect('login')
@@ -325,14 +296,18 @@ class GasPointAPI(APIView):
     def get(self, request, format=None):
         survey_id = request.session['survey_id']
         survey = SurveyDate.objects.get(pk=survey_id)
-        survey_mp = survey.survey_gas_point_geom.coords
+        try:
+            survey_mp = survey.survey_gas_point_geom.coords
+        except:
+            filtered_points = []
+            return JsonResponse(filtered_points, safe=False)
         filtered_points = []
         for point in survey_mp:
             if point[2] < 100:
                 continue
             else:
                 filtered_points.append(point)
-
         return JsonResponse(filtered_points, safe=False)
+
 
 

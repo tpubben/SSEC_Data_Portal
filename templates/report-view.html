@@ -143,6 +143,8 @@
 
             var contourdata = [{{ survey.survey_contour_geom | safe }}];
 
+            var sitetype = '{{ survey.geometry_type | safe }}';
+            console.log (sitetype)
 
             // Initialize map container
             var gasmap = L.map('map', {maxZoom: 20}).setView([53, -115], 6);
@@ -203,6 +205,11 @@
 
             var contourlayer = L.geoJson(contourdata, {style: contour_style}).addTo(gasmap);
 
+            /*
+            function PickSite (sitetype) {
+                if sitetype == 'SITE'
+                return L.
+            }*/
 
             try {
                 gasmap.fitBounds(gaslayer.getBounds());
@@ -225,7 +232,7 @@
 
             L.control.scale().addTo(gasmap);
 
-                // Add legend for gas color ramp
+            // Add legend for gas color ramp
             var legend = L.control({position: 'bottomright'});
 
                 legend.onAdd = function (gasmap) {

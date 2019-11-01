@@ -31,7 +31,7 @@ SECRET_KEY = 'jalskaldfja889293'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ssecmapserver.ddns.net', '127.0.0.1', '192.168.1.52']
+ALLOWED_HOSTS = ['ssecmapserver.ddns.net', '127.0.0.1', '192.168.1.52', 'gasportal.silverspringenergy.com']
 
 
 # Application definition
@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'leaflet',
     'guardian',
     'rest_framework',
-    'wms',
 ]
 
 MIDDLEWARE = [

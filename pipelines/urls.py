@@ -24,7 +24,6 @@ urlpatterns = [
     path('', views.ReportList, name='index'),
     path('signup/', views.SignUp.as_view(), name='signup'),
     path('reports/', views.ReportList, name='report_list'),
-    path('mapview/<int:survey_id>/', views.MapView, name='map_view'),
     path('map/', TemplateView.as_view(template_name='gas_survey.html')),
     path('reportview/<int:survey_id>/', views.ReportView, name='report_view'),
     path('createreport/', views.CreateReport, name='create_report'),
