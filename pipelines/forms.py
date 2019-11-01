@@ -44,9 +44,9 @@ class CreateReportForm(forms.ModelForm):
         exclude = ["survey_gas_point_geom","survey_gas_poly_geom", "survey_contour_geom"]
         labels = {
             "client_id_fk": "Client",
-            "pipe_id_fk": "Pipe",
+            "pipe_id_fk": "Pipeline Name",
             "survey_date": "Date",
-            "inf_id_fk": "Name",
+            "inf_id_fk": "Site Name",
             "geometry_type": "Site Type",
             "wind_direction": "Wind Direction",
             "flight_duration": "Flight Duration",

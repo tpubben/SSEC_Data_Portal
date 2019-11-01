@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <div class="clientinfo">
-    <h1>Infrastructure</h1>
+    <h3>Site Information</h3>
     {% if user.is_authenticated %}
 
     <input type="text" id="findInput" onkeyup="myFunction()" placeholder="Search for names..">
@@ -15,6 +15,7 @@
             {% if user.is_superuser %}
             <th>Client</th>
             <th>Site Name</th>
+            <th>Actions</th>
 
             {% endif %}
         </tr>
@@ -22,8 +23,8 @@
         <tr>
             {% if user.is_superuser %}
             <td>{{ inf.client_id_fk}}</td>
-
-            <td><a href="{% url 'tileupload' inf.inf_id %}">{{ inf.inf_name }}</a></td>
+            <td>{{ inf.inf_name }}</td>
+            <td><a href="{% url 'tileupload' inf.inf_id %}" class="button">Upload Site Imagery</a></td>
 
             {% endif %}
 

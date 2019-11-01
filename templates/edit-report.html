@@ -9,84 +9,94 @@
 {% if user.is_authenticated %}
 {% if user.is_superuser %}
 
-<h1>Edit Report</h1>
-<p><a href="{%url 'index'%}" class="home-button">Return To Report List</a></p>
+<h2>Edit Report</h2>
+<!--<p><a href="{%url 'index'%}" class="home-button">Return To Report List</a></p>-->
 <hr>
 <div id="info">
-    <h2>Survey Info</h2>
+    <h3>Survey Info</h3>
     {% if messages %}
         <ul class="messages">
         {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
         </ul>
     {% endif %}
 
-    <form method="post">{% csrf_token %}
-    <p><input type="submit" value="Save" class="button"></p>
-    {{ header_form.as_p }}
-</form>
+
+    <p><a href="{%url 'gasupload'%}" class="button" style="margin-top: 50px;">Upload Gas Data</a></p>
+    <p><a href="{%url 'jsonupload'%}" class="button" >Upload Contour Data</a></p>
+
+    <form method="post" id="create_form">{% csrf_token %}
+        <table class="formtable">
+        {% for field in header_form %}
+            <tr>
+                <th>{{ field.label_tag }}</th>
+                <td>{{ field }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+        <p><input type="submit" value="Save Survey" class="save-button"></p>
+    </form>
+
 </div>
 
-<p><a href="{%url 'gasupload'%}" class="button">Upload Gas Data</a></p>
-<p><a href="{%url 'jsonupload'%}" class="button">Upload Contour Data</a></p>
-
-
 <div id="leaks">
-    <h2>Detected Leaks</h2>
+    <h3>Detected Leaks</h3>
+
+    <table class="data-table" style="margin-bottom: 30px">
+        <tr class="header">
+            <th>Tag Number</th>
+            <th>Gas Reading</th>
+            <th>Photo</th>
+            <th></th>
+        </tr>
+        {% for def in defs %}
+        <tr>
+            <td>{{def.deficiency_number}}</td>
+            <td>{{def.deficiency_gas}}</td>
+            <td><img id="{{def.deficiency_number}}" src="{{def.deficiency_photo.url}}" style="width:75px;"></td>
+            <td><a href="{% url 'delete_leak' def.surveydate_id_fk.id def.id %}">Delete</a></td>
+
+            <!-- The Modal -->
+            <div id="myModal{{def.deficiency_number}}" class="modal">
+
+                <!-- The Close Button -->
+                <span class="close{{def.deficiency_number}}"
+                      style="position:absolute;top:15px;right:35px;color:#f1f1f1;font-size:40px;font-weight:bold;transition:0.3s;">&times;</span>
+
+                <!-- Modal Content (The Image) -->
+                <img class="modal-content" id="img0{{def.deficiency_number}}">
+            </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal{{def.deficiency_number}}");
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = document.getElementById("{{def.deficiency_number}}");
+        var modalImg = document.getElementById("img0{{def.deficiency_number}}");
+        // var captionText = document.getElementById("caption");
+        img.onclick = function(){
+          modal.style.display = "block";
+          modalImg.src = this.src;
+        }
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close{{def.deficiency_number}}")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+            </script>
+        </tr>
+        <tr>
+            <td colspan="3">{{def.deficiency_desc}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
     <p><a href="{% url 'add_leak' survey_id%}" class="button">Add Leak</a></p>
-<table class="data-table">
-    <tr class="header">
-        <th>Tag Number</th>
-        <th>Gas Reading</th>
-        <th>Photo</th>
-        <th></th>
-    </tr>
-    {% for def in defs %}
-    <tr>
-        <td>{{def.deficiency_number}}</td>
-        <td>{{def.deficiency_gas}}</td>
-        <td><img id="{{def.deficiency_number}}" src="{{def.deficiency_photo.url}}" style="width:75px;"></td>
-        <td><a href="{% url 'delete_leak' def.surveydate_id_fk.id def.id %}">Delete</a></td>
-
-        <!-- The Modal -->
-        <div id="myModal{{def.deficiency_number}}" class="modal">
-
-            <!-- The Close Button -->
-            <span class="close{{def.deficiency_number}}"
-                  style="position:absolute;top:15px;right:35px;color:#f1f1f1;font-size:40px;font-weight:bold;transition:0.3s;">&times;</span>
-
-            <!-- Modal Content (The Image) -->
-            <img class="modal-content" id="img0{{def.deficiency_number}}">
-
-        </div>
-        <script>
-    // Get the modal
-    var modal = document.getElementById("myModal{{def.deficiency_number}}");
-
-    // Get the image and insert it inside the modal - use its "alt" text as a caption
-    var img = document.getElementById("{{def.deficiency_number}}");
-    var modalImg = document.getElementById("img0{{def.deficiency_number}}");
-    // var captionText = document.getElementById("caption");
-    img.onclick = function(){
-      modal.style.display = "block";
-      modalImg.src = this.src;
-    }
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close{{def.deficiency_number}}")[0];
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-        </script>
-    </tr>
-    <tr>
-        <td colspan="3">{{def.deficiency_desc}}</td>
-    </tr>
-    {% endfor %}
-</table>
 </div>
 
 

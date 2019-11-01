@@ -160,7 +160,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # GDAL Library
-#GDAL_LIBRARY_PATH = r'C:\OSGeo4W64\share\gdal'
+# GDAL_LIBRARY_PATH = r'C:\OSGeo4W64\share\gdal'
 
 if os.name == 'nt':
     import platform

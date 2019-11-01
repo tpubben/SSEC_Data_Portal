@@ -15,10 +15,10 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<p><a href="{%url 'index'%}" class="home-button">Return To Report List</a></p>
-<h1>Report Results {{survey.survey_date}}</h1>
+
+<h2>Gas Survey Results  - Prepared for {{survey.client_id_fk}}</h2>
 <hr>
-<h3>Prepared for {{survey.client_id_fk}}</h3>
+<h4>Survey Date: {{survey.survey_date}}</h4>
 <hr>
 <table class="info-table">
     <tr>
@@ -43,16 +43,16 @@
     </tr>
 
 </table>
-<p><b>Comments:</b></p>
+
+<p><b>&nbsp;Comments:</b></p>
 <p>{{survey.survey_comment}}</p>
 <hr>
 
-<h2>Map of Findings</h2>
-
+<h3>Map of Findings</h3>
 <div id="map"></div>
-
 <hr>
-<h2>Possible Leaks</h2>
+
+<h3>Possible Leaks</h3>
 <table class="data-table">
     <tr class="header">
         <th>Tag Number</th>

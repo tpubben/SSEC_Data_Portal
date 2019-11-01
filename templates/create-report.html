@@ -8,7 +8,7 @@
 {% block content %}
 {% if user.is_authenticated %}
 {% if user.is_superuser %}
-<h1>Create New Report</h1>
+<h3>Create New Report</h3>
 <hr>
 <form method="post" id="create_form">{% csrf_token %}
 

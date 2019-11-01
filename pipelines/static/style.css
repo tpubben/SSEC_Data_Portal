@@ -6,6 +6,10 @@
 
  /* header styling */
 
+h3 {
+    margin-bottom: 30px
+}
+
 .header-container {
     display: flex;
     flex-direction: row;
@@ -302,7 +306,8 @@
 
 
 .info-table th {
-    padding-right: 4px;
+    padding-right: 20px;
+
 }
 
 ul.messages {
@@ -315,14 +320,13 @@ ul.messages {
 
 .button {
     background-color: #494949;
-    border: none;
-    padding: 3px;
-    font-weight: bold;
+    border: solid black 1px;
+    padding: 6px;
+    font-weight: normal;
     color: white;
     border-radius: 5px;
     text-align: center;
 }
-
 
 .button:hover {
     background-color:#4CAF50;
@@ -341,6 +345,21 @@ a.button:hover {
     color: white;
 }
 
+.save-button {
+    background-color: #4CAF50;
+    border: solid white 1px;
+    padding: 6px;
+    font-weight: normal;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.save-button:hover {
+    text-decoration: none;
+    transition: 0.3s;
+    background-color: red;
+}
 
 .red-button {
     background-color: #494949;
@@ -406,7 +425,6 @@ a.home-button:hover {
 
 #map {
     border: 3px solid #BAB4AA;
-
     border-radius: 10px;
     height: 600px;
     width: 100%;
