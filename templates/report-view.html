@@ -92,7 +92,7 @@
 
     // Get the image and insert it inside the modal - use its "alt" text as a caption
     var img = document.getElementById("{{def.deficiency_number}}");
-    var mapDiv = document.getElementById("gasmap");
+    var mapDiv = document.getElementById("map");
     var modalImg = document.getElementById("img0{{def.deficiency_number}}");
     // var captionText = document.getElementById("caption");
     img.onclick = function(){
@@ -144,7 +144,14 @@
             var contourdata = [{{ survey.survey_contour_geom | safe }}];
 
             var sitetype = '{{ survey.geometry_type | safe }}';
-            console.log (sitetype)
+
+            if (sitetype == "PIPELINE") {
+                var site_geo = '{{ linecoords | safe }}';
+            } else {
+                var site_geo = '{{ infcoords | safe }}';
+            };
+            console.log(site_geo);
+
 
             // Initialize map container
             var gasmap = L.map('map', {maxZoom: 20}).setView([53, -115], 6);
@@ -166,7 +173,7 @@
                 } else if (gasvalue > 250) {
                     i ++;
                     return '#FC4E2A';
-                } else if (gasvalue > 125) {
+                } else if  (gasvalue > 125) {
                     i ++;
                     return '#FD8D3C';
                 } else if (gasvalue > 75) {
